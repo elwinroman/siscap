@@ -1,5 +1,8 @@
 <?php 
 require 'autoload.php';
+require 'views/layout/header.php';
+require 'views/layout/sidebar.php';
+require 'views/layout/footer.php';
 
 /* Comprueba si el controlador existe y es válido. */
 if(isset($_GET['controller'])) {
