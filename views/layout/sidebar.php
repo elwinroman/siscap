@@ -1,5 +1,93 @@
-<!-- Menu code html here -->
+<header class="mynavbar">
+	<i class="btn-sidebar zmdi zmdi-menu zmdi-hc-lg"></i>
+	<h3 class="nv-title">Sistema cap</h3>
+</header>
+
+<nav class="sidebar dark-style">
+	<div class="sb-title">
+		<span>TITULO MENU</span>
+		<i class="zmdi zmdi-close"></i>
+	</div>
+
+	<div class="user-info ui">
+		<figure>
+			<img src="assets/img/avatar-male.png" alt="UserIcon">
+			<figcaption class="text-center">User Name</figcaption>
+		</figure>
+		<div class="menu-setting-options">
+			<i class="zmdi zmdi-settings"></i>			
+			<i class="zmdi zmdi-power" data-toggle="tooltip" title="Salir del sistema"></i>
+		</div>
+	</div>
+	
+	<div class="full-menu">
+		<!-- Menu para el módulo Principal -->
+		<div class="menu-box">
+			<a class="menu-item" href="#principal" data-menu-id="1">
+				<i class="i1 zmdi zmdi-view-dashboard"></i>
+				<span>Principal</span>
+				<!-- <i class="i2 zmdi"></i> -->
+			</a>
+		</div>
+
+		<!-- Menu para el módulo Trabajador -->
+		<div class="menu-box">
+			<a class="menu-item" data-menu-id="2" href="#trabajador">
+				<i class="i1 zmdi zmdi-accounts"></i>
+				<span>Trabajadores</span>
+				<i class="i2 zmdi zmdi-chevron-down"></i>
+			</a>
+			<div class="submenu-box">
+				<a class="submenu-item" data-submenu-id="1" href="#">
+					<i class="zmdi zmdi-circle"></i>
+					<span>Inicio</span>
+				</a>
+				<a class="submenu-item" data-submenu-id="2" href="?controller=Trabajador&action=formCrearTrabajador">
+					<i class="zmdi zmdi-circle"></i>
+					<span>Crear trabajador</span>
+				</a>
+			</div>
+		</div>
+
+		<!-- Menu para el módulo Cargo -->
+		<div class="menu-box">
+			<a class="menu-item" href="#cargo" data-menu-id="3">
+				<i class="i1 zmdi zmdi-case"></i>
+				<span>Cargos</span>
+				<i class="i2 zmdi zmdi-chevron-down"></i>
+			</a>
+			<div class="submenu-box">
+				<a class="submenu-item" data-submenu-id="1" href="#">
+					<i class="zmdi zmdi-circle"></i>
+					<span>Inicio</span>
+				</a>
+				<a class="submenu-item" data-submenu-id="2" href="#">
+					<i class="zmdi zmdi-circle"></i>
+					<span>Crear cargo</span>
+				</a>
+			</div>
+		</div>
+
+		<!-- Menu para el módulo Oficina -->
+		<div class="menu-box">
+			<a class="menu-item" href="#oficina" data-menu-id="4">
+				<i class="i1 zmdi zmdi-balance"></i>
+				<span>Oficinas</span>
+				<i class="i2 zmdi zmdi-chevron-down"></i>
+			</a>
+			<div class="submenu-box">
+				<a class="submenu-item" data-submenu-id="1" href="#">
+					<i class="zmdi zmdi-circle"></i>
+					<span>Inicio</span>
+				</a>
+				<a class="submenu-item" data-submenu-id="2" href="?controller=Oficina&action=formCrearOficina">
+					<i class="zmdi zmdi-circle"></i>
+					<span>Crear oficina</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</nav>
 
 <!-- Aquí comienza la parte del contenido -->
-<section class="contenido" spellcheck="false">	
-<!-- spellcheck: corrección de ortografía -->
+<section class="contenido" spellcheck="false">	<!-- spellcheck[false]: corrección de ortografía desactivada-->

@@ -1,0 +1,80 @@
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/roboto-regular.ttf"), 
+    url("../fonts/roboto-regular.eot"), 
+    url("../fonts/roboto-regular.woff"), 
+    url("../fonts/roboto-regular.woff2"), 
+    url("../fonts/roboto-regular.svg");
+}
+@font-face {
+  font-family: "Roboto bold";
+  src: url(../fonts/Roboto-Bold.ttf);
+}
+/* Niveles de color: 0(claro)-5(oscuro) */
+:root {
+	--dark5: #161e2e;
+	--dark4: #252f3f;
+	--dark3: #4b5563;
+	--dark0: #b1b1b1;
+	--red: #fd3256;
+	--morado: #70608f;
+	--black: black;
+	--white: white;
+}
+/* Dark style */
+nav.dark-style { 
+	background-color: var(--dark4); 
+	color: var(--dark0);
+}
+nav.dark-style div.sb-title { background-color: #161e2e; }
+nav.dark-style div.sb-title span { color: var(--white); }
+nav.dark-style div.sb-title i:hover { color: var(--white); }
+
+nav.dark-style div.ui figure figcaption { color: var(--white); }
+nav.dark-style div.ui div.opt {
+	border-bottom: 1px solid var(--dark0);
+	border-top: 1px solid var(--dark0);
+}
+nav.dark-style div.opt i.zmdi-settings:hover { color: white; }
+nav.dark-style div.opt i.zmdi-power:hover { color: var(--red); }
+
+nav.dark-style a.menu-item:hover,
+nav.dark-style a.menu-item.active {
+	background-color: #161e2e;
+	color: var(--white);
+}
+nav.dark-style div.submenu-box { background-color: #161e2e; }
+nav.dark-style a.submenu-item:hover { 
+	border-right: 5px solid var(--morado);
+	color: var(--morado); 
+}
+
+/* Light-style */
+nav.light-style {
+	background-color: var(--white);
+	color: var(--dark3);
+}
+nav.light-style div.sb-title { background-color: #eaecf1; }
+nav.light-style div.sb-title span { color: var(--black); }
+nav.light-style div.sb-title i:hover { color: var(--black); }
+
+nav.light-style div.ui figure figcaption { color: var(--black); }
+nav.light-style div.ui div.opt {
+	border-bottom: 1px solid gray;
+	border-top: 1px solid gray;
+}
+nav.light-style div.opt i.zmdi-settings:hover { color: var(--black); }
+nav.light-style i.zmdi-power:hover { color: var(--red); }
+
+nav.light-style a.menu-item:hover,
+nav.light-style a.menu-item.active {
+	background-color: #eaecf1;
+	color: var(--black);
+}
+nav.light-style div.submenu-box { background-color: #eaecf1; }
+nav.light-style a.submenu-item:hover,
+nav.light-style a.submenu-item.active {
+	border-right: 5px solid var(--morado);
+	/*color: var(--morado);*/
+	color: red;
+}
