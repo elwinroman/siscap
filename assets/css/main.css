@@ -23,7 +23,7 @@ header.mynavbar {
 	background-color: black;
 	padding: 0 5px;
 }
-i.btn-sidebar {
+i.btn-menu {
 	order: 1;
 	flex: 0 1 2%;
 	cursor: pointer;
@@ -43,7 +43,7 @@ header h3.nv-title {
 }
 
 /* - - - - Section (sidebar) - - - - */
-nav.sidebar {
+nav#sidebar-menu {
 	z-index: 10;
 	position: fixed;
 	overflow: auto;
@@ -55,7 +55,7 @@ nav.sidebar {
 	font-family: "Roboto bold",Arial,Helvetica,Verdana;
 	font-size: 14px;
 }
-nav div.sb-title {
+nav div.menu-title {
 	display: flex;
 	align-items: center;
 	height: 40px;
@@ -66,11 +66,11 @@ nav div.sb-title {
 	font-size: 15px;
 	text-align: center;
 }
-div.sb-title span {
+div.menu-title span {
 	flex: 1 1 94%;
 	padding-left: 6%;
 }
-div.sb-title i {
+div.menu-title i {
 	flex: 0 1 6%;
 	cursor: pointer;
 	font-size: 25px;	/*size-icon*/
@@ -162,7 +162,7 @@ section.contenido {
 /* - - - - - Responsive - - - - - */
 /* pantalla-super-pequeña */
 @media screen and (max-width: 400px) {
-	nav.sidebar {
+	nav#sidebar-menu {
 		width: 100vw;
 		height: 100vh;
 	}
@@ -170,7 +170,7 @@ section.contenido {
 	a.menu-item { line-height: 40px !important; }
 	
 	/* order navbar items */
-	i.btn-sidebar { order: 2; }
+	i.btn-menu { order: 2; }
 	.mynavbar h3 { order: 1; }
 }
 /* small-device (sm) */

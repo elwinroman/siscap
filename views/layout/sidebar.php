@@ -1,10 +1,10 @@
 <header class="mynavbar">
-	<i class="btn-sidebar zmdi zmdi-menu zmdi-hc-lg"></i>
+	<i class="btn-menu zmdi zmdi-menu zmdi-hc-lg"></i>
 	<h3 class="nv-title">Sistema cap</h3>
 </header>
 
-<nav class="sidebar dark-style">
-	<div class="sb-title">
+<nav id="sidebar-menu" class="dark-style">
+	<div class="menu-title">
 		<span>TITULO MENU</span>
 		<i class="zmdi zmdi-close"></i>
 	</div>
