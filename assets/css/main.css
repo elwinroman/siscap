@@ -54,6 +54,7 @@ nav#sidebar-menu {
 	user-select: none;
 	font-family: "Roboto bold",Arial,Helvetica,Verdana;
 	font-size: 14px;
+	transition: transform .2s ease-out;
 }
 nav div.menu-title {
 	display: flex;
@@ -148,13 +149,10 @@ a.submenu-item i {
 }
 a.submenu-item span { flex: 1 1 72%; }
 
-
 /* - - - Section (contenido) - - - */
 section.contenido {
 	overflow: auto;
 	height: 93vh !important;
-	/*background-color: #f7f7f7;*/
-	/*background: red;*/
 	padding: 15px;
 	font-family: "Roboto",Arial,Helvetica,Verdana !important;
 }
@@ -170,20 +168,12 @@ section.contenido {
 	a.menu-item { line-height: 40px !important; }
 	
 	/* order navbar items */
-	i.btn-menu { order: 2; }
 	.mynavbar h3 { order: 1; }
+	.mynavbar i.btn-menu { order: 3; }
 }
 /* small-device (sm) */
 @media screen and (max-width: 576px) {	
 	section.contenido {
 		padding: 10px;
-	}
-	.col-sm {
-		padding-right: 10px;
-		padding-left: 10px;
-	}
-	fieldset {
-		padding-top: 10px; 
-		padding-bottom: 10px;
 	}
 }
