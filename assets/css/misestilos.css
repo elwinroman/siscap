@@ -23,10 +23,10 @@
 }
 /* Dark style */
 nav.dark-style { 
-	background-color: var(--dark4); 
+	background: var(--dark4); 
 	color: var(--dark0);
 }
-nav.dark-style div.menu-title { background-color: #161e2e; }
+nav.dark-style div.menu-title { background: #161e2e; }
 nav.dark-style div.menu-title span { color: var(--white); }
 nav.dark-style div.menu-title i:hover { color: var(--white); }
 
@@ -38,9 +38,13 @@ nav.dark-style div.ui div.opt {
 nav.dark-style div.opt i.zmdi-settings:hover { color: white; }
 nav.dark-style div.opt i.zmdi-power:hover { color: var(--red); }
 
+nav.dark-style a.menu-item {
+	background: var(--dark4);
+}
+
 nav.dark-style a.menu-item:hover,
 nav.dark-style a.menu-item.active {
-	background-color: #161e2e;
+	background: #161e2e;
 	color: var(--white);
 }
 nav.dark-style div.submenu-box { background-color: #161e2e; }
@@ -51,10 +55,10 @@ nav.dark-style a.submenu-item:hover {
 
 /* Light-style */
 nav.light-style {
-	background-color: var(--white);
+	background: var(--white);
 	color: var(--dark3);
 }
-nav.light-style div.menu-title { background-color: #eaecf1; }
+nav.light-style div.menu-title { background: #eaecf1; }
 nav.light-style div.menu-title span { color: var(--black); }
 nav.light-style div.menu-title i:hover { color: var(--black); }
 
@@ -68,7 +72,7 @@ nav.light-style i.zmdi-power:hover { color: var(--red); }
 
 nav.light-style a.menu-item:hover,
 nav.light-style a.menu-item.active {
-	background-color: #eaecf1;
+	background: #eaecf1;
 	color: var(--black);
 }
 nav.light-style div.submenu-box { background-color: #eaecf1; }

@@ -44,7 +44,7 @@ header h3.nv-title {
 
 /* - - - - Section (sidebar) - - - - */
 nav#sidebar-menu {
-	z-index: 10;
+	z-index: 1;
 	position: fixed;
 	overflow: auto;
 	top: 0;
@@ -84,7 +84,6 @@ nav div.user-info figure {
 div.ui figure img {
 	width: 100px;
 	height: 100px;
-	/*border-radius: 50%;*/
 }
 div.ui div.menu-setting-options {
 	line-height: 50px;
@@ -103,7 +102,6 @@ nav div.menu-box {
 	display: flex;
 	flex-direction: column;
 }
-ul.menu-item,
 a.menu-item {
 	display: flex;
 	align-items: center;
@@ -129,18 +127,22 @@ a.menu-item i.i2 {
 }		
 /* - - submenu-box - - */
 nav div.menu-box div.submenu-box {
-	/*display: none;*/
-	display: block;
-	padding-bottom: 15px;
+	height: 0;
+	transition-property: height;
 }
 a.submenu-item {
+	opacity: 0;
+	visibility: hidden;
 	display: flex;
 	align-items: center;
 	height: 30px;
 	font-family: Arial,Helvetica,Verdana;
 	color: inherit;
+	transition-property: all;
 }
-a.submenu-item:hover { transition: all .3s ease-out; }
+a.submenu-item:hover { 
+	/* nothing here */
+}
 a.submenu-item i {
 	flex: 0 1 28%;
 	text-align: right;
