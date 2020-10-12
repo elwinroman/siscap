@@ -1,14 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
 	"use strict";
 	
-	const _SIZE = {
-		smallDevice		: 576,	// SmallDevices
-		extraSmallDev 	: 400	// ExtraSmallDevices
+	const SizeDevice = {
+		small		: 576,	// SmallDevices
+		extraSmall 	: 400	// ExtraSmallDevices
 	};
 
 	var menu = Menu();
 	menu.clickMenuOpenIcon();
 	menu.clickMenuCloseIcon();
+	menu.clickAnyPlace();
 	menu.resizeEvent();
 	menu.slideSubmenus();
 
@@ -24,19 +25,20 @@ document.addEventListener('DOMContentLoaded', function() {
 		var estadoMenu = true;	// true (menu activo), false (menu oculto)
 
 		/** Muestra el menu */
-		function abrir() {
-			menuSidebar.style.opacity = "1";
-			if(window.innerWidth > _SIZE.extraSmallDev)
+		function showMenu() {
+			if(window.innerWidth > SizeDevice.extraSmall)
 				menuSidebar.style.transform = "translate(0, 0)";
 			else
 				menuSidebar.style.transform = "translate(0, 0)";
+			estadoMenu = true;
 		}
 		/** Oculta el menu */
-		function cerrar() {
-			if(window.innerWidth > _SIZE.extraSmallDev)
+		function hideMenu() {
+			if(window.innerWidth > SizeDevice.extraSmall)
 				menuSidebar.style.transform = "translate(-101%, 0)";
 			else
 				menuSidebar.style.transform = "translate(0, -101%)";
+			estadoMenu = false;
 		}
 		/* Evento resize en la ventana */
 		function resizeEvent() {
@@ -80,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 		/** 
 		* Remueve nombres de clases a una lista de elementos 
-		* @param{HTMLElements} elementList 	=> Lista de nodos
+		* @param{HTMLCollection} elementList 	=> Lista de nodos
 		* @param{string} nameClass 			=> Nombre de clase
 		*/
 		function myRemoveClass(elementList, nameClass) {
@@ -89,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 		/** 
 		* Añade nombres de clases a una lista de elementos 
-		* @param {HTMLElements} elementList => Lista de nodos
+		* @param {HTMLCollection} elementList => Lista de nodos
 		* @param {string} nameClass			=> Nombre de clase
 		*/
 		function myAddClass(elementList, nameClass) {
@@ -99,27 +101,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		/** Reposicionamiento del menu(sidebar) */
 		function reposicionarMenu() {
-			if(!estadoMenu && (window.innerWidth > _SIZE.extraSmallDev)) {
-				menuSidebar.style.opacity = "0";
+			if(!estadoMenu && (window.innerWidth > SizeDevice.extraSmall))
 				menuSidebar.style.transform = "translate(-101%, 0)";
-			}
-			else if(!estadoMenu && (window.innerWidth <= _SIZE.extraSmallDev)) {
-				menuSidebar.style.opacity = "0";
+			else
 				menuSidebar.style.transform = "translate(0, -101%)";
-			}
 		}
 		return {
 			clickMenuOpenIcon: function() {
 				menuOpenIcon.addEventListener('click', function() {
-					abrir();
-					estadoMenu = true;
+					showMenu();
 				}, false);
 			},
 			clickMenuCloseIcon: function() {
 				menuCloseIcon.addEventListener('click', function() {
-					cerrar();
-					estadoMenu = false;
+					hideMenu();
 				}, false);
+			},
+			/** Cierra el menu al hacer click en cualquier parte del contenido */
+			clickAnyPlace: function() {
+				var seccionContenido = document.querySelector("section.contenido");
+				var myNavbar = document.querySelector("header > h3");
+				seccionContenido.addEventListener('click', function() { 
+					hideMenu(); 
+				});
+				myNavbar.addEventListener('click', function() { 
+					hideMenu();
+				});
 			},
 			resizeEvent: function() {
 				resizeEvent();
@@ -137,13 +144,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	     * @param {Number} duration 		=> Duración del efecto en milisegundos
 	     */
 		slideUp: function(element, duration = 400) {
-			element.style.height = 0;
-			element.style.transitionDuration = duration + "ms";
-			var submenuList = element.querySelectorAll("a.submenu-item");
-			for(var submenu of submenuList) {
-				submenu.style.transitionDuration = duration + "ms";
-				submenu.style.opacity = 0;
-				submenu.style.visibility = "hidden";
+			if(document.body.contains(element)) {
+				element.style.height = 0;
+				element.style.transitionDuration = duration + "ms";
+				var submenuList = element.querySelectorAll("a.submenu-item");
+				for(var submenu of submenuList) {
+					submenu.style.transitionDuration = duration + "ms";
+					submenu.style.opacity = 0;
+					submenu.style.visibility = "hidden";
+				}
 			}
 		},
 	    /**
@@ -152,13 +161,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	     * @param {Number} duration 		=> Duración del efecto en milisegundos
 	     */
 		slideDown: function(element, duration = 400) {
-			element.style.height = 80 + "px";
-			element.style.transitionDuration = duration + "ms";
-			var valueList = element.querySelectorAll("a.submenu-item");
-			for(var submenu of submenuList) {
-				submenu.style.transitionDuration = duration + "ms";
-				submenu.style.opacity = 1;
-				submenu.style.visibility = "visible";
+			if(document.body.contains(element)) {
+				element.style.height = 80 + "px";
+				element.style.transitionDuration = duration + "ms";
+				var submenuList = element.querySelectorAll("a.submenu-item");
+				for(var submenu of submenuList) {
+					submenu.style.transitionDuration = duration + "ms";
+					submenu.style.opacity = 1;
+					submenu.style.visibility = "visible";
+				}
 			}
 		}
 	}
