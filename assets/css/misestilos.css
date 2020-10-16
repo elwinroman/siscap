@@ -47,10 +47,14 @@ nav.dark-style a.menu-item.active {
 	background: #161e2e;
 	color: var(--white);
 }
-nav.dark-style div.submenu-box { background-color: #161e2e; }
-nav.dark-style a.submenu-item:hover { 
+nav.dark-style div.submenu-box { 
+	background-color: #161e2e; 
+}
+nav.dark-style a.submenu-item:hover,
+nav.dark-style a.submenu-item.active { 
 	border-right: 5px solid var(--morado);
-	color: var(--morado); 
+	/*color: var(--morado);*/
+	background: white;
 }
 
 /* Light-style */

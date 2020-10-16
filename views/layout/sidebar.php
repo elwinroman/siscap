@@ -23,7 +23,7 @@
 	<div class="full-menu">
 		<!-- Menu para el módulo Principal -->
 		<div class="menu-box">
-			<a class="menu-item" href="#principal" data-menu-id="1">
+			<a class="menu-item" href="#principal" data-menu-item-id="1">
 				<i class="i1 zmdi zmdi-view-dashboard"></i>
 				<span>Principal</span>
 				<!-- <i class="i2 zmdi"></i> -->
@@ -32,17 +32,17 @@
 
 		<!-- Menu para el módulo Trabajador -->
 		<div class="menu-box">
-			<a class="menu-item" data-menu-id="2" href="#trabajador">
+			<a class="menu-item" data-menu-item-id="2" href="#trabajador">
 				<i class="i1 zmdi zmdi-accounts"></i>
 				<span>Trabajadores</span>
 				<i class="i2 zmdi zmdi-chevron-down"></i>
 			</a>
 			<div class="submenu-box">
-				<a class="submenu-item" data-submenu-id="1" href="#">
+				<a class="submenu-item" data-submenu-item-id="1" href="#">
 					<i class="zmdi zmdi-circle"></i>
 					<span>Inicio</span>
 				</a>
-				<a class="submenu-item" data-submenu-id="2" href="?controller=Trabajador&action=formCrearTrabajador">
+				<a class="submenu-item" data-submenu-item-id="2" href="?controller=Trabajador&action=formCrearTrabajador">
 					<i class="zmdi zmdi-circle"></i>
 					<span>Crear trabajador</span>
 				</a>
@@ -51,17 +51,17 @@
 
 		<!-- Menu para el módulo Cargo -->
 		<div class="menu-box">
-			<a class="menu-item" href="#cargo" data-menu-id="3">
+			<a class="menu-item" href="#cargo" data-menu-item-id="3">
 				<i class="i1 zmdi zmdi-case"></i>
 				<span>Cargos</span>
 				<i class="i2 zmdi zmdi-chevron-down"></i>
 			</a>
 			<div class="submenu-box">
-				<a class="submenu-item" data-submenu-id="1" href="#">
+				<a class="submenu-item" data-submenu-item-id="1" href="#">
 					<i class="zmdi zmdi-circle"></i>
 					<span>Inicio</span>
 				</a>
-				<a class="submenu-item" data-submenu-id="2" href="#">
+				<a class="submenu-item" data-submenu-item-id="2" href="#">
 					<i class="zmdi zmdi-circle"></i>
 					<span>Crear cargo</span>
 				</a>
@@ -70,17 +70,17 @@
 
 		<!-- Menu para el módulo Oficina -->
 		<div class="menu-box">
-			<a class="menu-item" href="#oficina" data-menu-id="4">
+			<a class="menu-item" href="#oficina" data-menu-item-id="4">
 				<i class="i1 zmdi zmdi-balance"></i>
 				<span>Oficinas</span>
 				<i class="i2 zmdi zmdi-chevron-down"></i>
 			</a>
 			<div class="submenu-box">
-				<a class="submenu-item" data-submenu-id="1" href="#">
+				<a class="submenu-item" data-submenu-item-id="1" href="#">
 					<i class="zmdi zmdi-circle"></i>
 					<span>Inicio</span>
 				</a>
-				<a class="submenu-item" data-submenu-id="2" href="?controller=Oficina&action=formCrearOficina">
+				<a class="submenu-item" data-submenu-item-id="2" href="?controller=Oficina&action=formCrearOficina">
 					<i class="zmdi zmdi-circle"></i>
 					<span>Crear oficina</span>
 				</a>

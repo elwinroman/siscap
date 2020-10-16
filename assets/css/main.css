@@ -140,9 +140,6 @@ a.submenu-item {
 	color: inherit;
 	transition-property: all;
 }
-a.submenu-item:hover { 
-	/* nothing here */
-}
 a.submenu-item i {
 	flex: 0 1 28%;
 	text-align: right;

@@ -1,17 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
 	"use strict";
-	
-	const SizeDevice = {
-		small		: 576,	// SmallDevices
-		extraSmall 	: 400	// ExtraSmallDevices
-	};
 
 	var menu = Menu();
 	menu.clickMenuOpenIcon();
 	menu.clickMenuCloseIcon();
-	menu.clickAnyPlace();
+	// menu.clickAnyPlace();
 	menu.resizeEvent();
 	menu.slideSubmenus();
+	menu.restaurarItemsSeleccionados();
 
 	function Menu() {
 
@@ -20,9 +16,16 @@ document.addEventListener('DOMContentLoaded', function() {
 		var menuCloseIcon = document.querySelector("div.menu-title .zmdi-close");
 		var menuItemList = document.getElementsByClassName("menu-item");
 		var menuItemIconList = document.querySelectorAll(".menu-item > i.i2");
+		var submenuItemList = document.querySelectorAll(".submenu-item");
 		var submenuPanelList = document.querySelectorAll(".menu-item + div.submenu-box");
 
-		var estadoMenu = true;	// true (menu activo), false (menu oculto)
+		var estadoMenu = true;					// true (menu activo), false (menu oculto)
+		
+		// "key" y "value", cookies que permiten al menú no perder información al refrescar la página
+		var keyMenuItem = "menuItemId"; 		// llave donde se almacena un valor del menú-item seleccionado
+		var valueMenuItem = undefined;			// valor que se guarda en la llave
+		var keySubmenuItem = "submenuItemId";
+		var valueSubmenuItem = undefined;
 
 		/** Muestra el menu */
 		function showMenu() {
@@ -46,8 +49,8 @@ document.addEventListener('DOMContentLoaded', function() {
 				reposicionarMenu();
 			}, false);
 		}
-		/** Efecto SLIDE Submenus */
-		function slideSubmenus() {
+		/** Despliega submenus, controla el efecto slide, etc... al hacer click en un item del menú */
+		function clickMenuItem() {
 			for(var menuItem of menuItemList) {
 				menuItem.addEventListener('click', function(event) {
 					event.preventDefault();
@@ -62,17 +65,54 @@ document.addEventListener('DOMContentLoaded', function() {
 						// Icono chevron up-down
 						myRemoveClass(menuItemIconList, "zmdi-chevron-up");
 						myAddClass(menuItemIconList, "zmdi-chevron-down");
-						this.querySelector("i.i2").classList.remove("zmdi-chevron-down");
-						this.querySelector("i.i2").classList.add("zmdi-chevron-up");
-					} else {	// Cuando está activo el menú (abiertos los submenus)
+						if(document.body.contains(this.querySelector("i.i2"))) {
+							this.querySelector("i.i2").classList.remove("zmdi-chevron-down");
+							this.querySelector("i.i2").classList.add("zmdi-chevron-up");
+						}
+						// Guarda en memoria el menu-item seleccionado
+						valueMenuItem = this.dataset.menuItemId;
+						sessionStorage.setItem(keyMenuItem, valueMenuItem);
+					} 
+					else {	// Cuando está activo el menú (abiertos los submenus)
 						this.classList.remove("active");
 						Animation.slideUp(submenuBox, 200);
 						// Icono chevron up-down
-						this.querySelector("i.i2").classList.remove("zmdi-chevron-up");
-						this.querySelector("i.i2").classList.add("zmdi-chevron-down");
+						if(document.body.contains(this.querySelector("i.i2"))) {
+							this.querySelector("i.i2").classList.remove("zmdi-chevron-up");
+							this.querySelector("i.i2").classList.add("zmdi-chevron-down");
+						}
+						// Elimina de memoria el item seleccionado
+						sessionStorage.removeItem(keyMenuItem);
 					}
 				}, false);
 			}
+		}
+		/** Controla lo que debe hacer al hacer click en un item del submenu */
+		function clickSubmenuItem() {
+			for(var submenuItem of submenuItemList) {
+				submenuItem.addEventListener('click', function() {
+					this.classList.add("active");
+					// Guarda en memoria el menu-item seleccionado
+					valueSubmenuItem = this.dataset.submenuItemId;
+					sessionStorage.setItem(keySubmenuItem, valueSubmenuItem);
+				});
+			}
+		}
+		/** 
+		 * Restaura el menu-item seleccionado  
+		 * @param{HTMLElement} menuItem
+		 * @param{HTMLElement} submenuBox
+		 */
+		function restaurarMenuItem(menuItem, submenuBox) {
+			menuItem.classList.add("active");
+			Animation.slideDown(submenuBox, 0);	// Restaura a la velocidad de la luz
+		}
+		/** 
+		 * Restaura el submenu-item seleccionado
+		 * @param{HTMLElement} submenuItem
+		 */
+		function restaurarSubmenuItem(submenuItem) {
+			submenuItem.classList.add("active");
 		}
 		/** Ocultar todos los submenus */
 		function ocultarSubmenus() {
@@ -81,19 +121,19 @@ document.addEventListener('DOMContentLoaded', function() {
 			});
 		}
 		/** 
-		* Remueve nombres de clases a una lista de elementos 
-		* @param{HTMLCollection} elementList 	=> Lista de nodos
-		* @param{string} nameClass 			=> Nombre de clase
-		*/
+		 * Remueve nombres de clases a una lista de elementos 
+		 * @param{HTMLCollection} elementList 	=> Lista de nodos
+		 * @param{string} nameClass 			=> Nombre de clase
+		 */
 		function myRemoveClass(elementList, nameClass) {
 			for(var element of elementList)
 				element.classList.remove(nameClass);
 		}
 		/** 
-		* Añade nombres de clases a una lista de elementos 
-		* @param {HTMLCollection} elementList => Lista de nodos
-		* @param {string} nameClass			=> Nombre de clase
-		*/
+		 * Añade nombres de clases a una lista de elementos 
+		 * @param {HTMLCollection} elementList => Lista de nodos
+		 * @param {string} nameClass			=> Nombre de clase
+		 */
 		function myAddClass(elementList, nameClass) {
 			for(var element of elementList)
 				element.classList.add(nameClass);
@@ -132,45 +172,23 @@ document.addEventListener('DOMContentLoaded', function() {
 				resizeEvent();
 			}, 
 			slideSubmenus: function() {
-				slideSubmenus();
+				clickMenuItem();
+				clickSubmenuItem();
+			},
+			/** Restaura los items seleccionados del menú o submenú cada vez que se hace refresh */
+			restaurarItemsSeleccionados: function() {
+				// Cuando haya algo seleccionado
+				if(sessionStorage.length > 0) {
+					valueMenuItem = sessionStorage.getItem(keyMenuItem);
+					var menuItem = document.querySelector("a.menu-item[data-menu-item-id='"+valueMenuItem+"']");
+					var submenuBox = menuItem.nextElementSibling;
+
+					valueSubmenuItem = sessionStorage.getItem(keySubmenuItem);
+					var submenuItem = submenuBox.querySelector("a.submenu-item[data-submenu-item-id='"+valueSubmenuItem+"']");
+					restaurarMenuItem(menuItem, submenuBox);
+					restaurarSubmenuItem(submenuItem);
+				}
 			}
 		}		
-	}
-	/////////////////////////////////////////////////////////////////////
-	var Animation = {
-		/**
-	     * Efecto SlideUp
-	     * @param {HTMLElement} element 	=> Nodo o elemento HTML
-	     * @param {Number} duration 		=> Duración del efecto en milisegundos
-	     */
-		slideUp: function(element, duration = 400) {
-			if(document.body.contains(element)) {
-				element.style.height = 0;
-				element.style.transitionDuration = duration + "ms";
-				var submenuList = element.querySelectorAll("a.submenu-item");
-				for(var submenu of submenuList) {
-					submenu.style.transitionDuration = duration + "ms";
-					submenu.style.opacity = 0;
-					submenu.style.visibility = "hidden";
-				}
-			}
-		},
-	    /**
-	     * Efecto SlideDown
-	     * @param {HTMLElement} elemento 	=> Nodo o elemento HTML
-	     * @param {Number} duration 		=> Duración del efecto en milisegundos
-	     */
-		slideDown: function(element, duration = 400) {
-			if(document.body.contains(element)) {
-				element.style.height = 80 + "px";
-				element.style.transitionDuration = duration + "ms";
-				var submenuList = element.querySelectorAll("a.submenu-item");
-				for(var submenu of submenuList) {
-					submenu.style.transitionDuration = duration + "ms";
-					submenu.style.opacity = 1;
-					submenu.style.visibility = "visible";
-				}
-			}
-		}
 	}
 });
