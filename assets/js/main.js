@@ -2,12 +2,21 @@ document.addEventListener('DOMContentLoaded', function() {
 	"use strict";
 
 	var menu = Menu();
-	menu.clickMenuOpenIcon();
-	menu.clickMenuCloseIcon();
-	// menu.clickAnyPlace();
-	menu.resizeEvent();
-	menu.slideSubmenus();
-	menu.restaurarItemsSeleccionados();
+	
+	(function runMenu() {
+		menu.clickMenuOpenIcon();
+		menu.clickMenuCloseIcon();
+		menu.clickAnyPlace();
+		// menu.resizeEvent();
+		menu.slideSubmenus();
+		menu.restaurarItemsSeleccionados();
+	})();
+
+	var form = Form();
+	form.validation();
+
+	var formTrabajador = FormTrabajador();
+	formTrabajador.selectBoxes();
 
 	function Menu() {
 
@@ -19,17 +28,24 @@ document.addEventListener('DOMContentLoaded', function() {
 		var submenuItemList = document.querySelectorAll(".submenu-item");
 		var submenuPanelList = document.querySelectorAll(".menu-item + div.submenu-box");
 
-		var estadoMenu = true;					// true (menu activo), false (menu oculto)
+		var estadoMenu = true;				// true (menu activo), false (menu oculto)
 		
-		// "key" y "value", cookies que permiten al menú no perder información al refrescar la página
-		var keyMenuItem = "menuItemId"; 		// llave donde se almacena un valor del menú-item seleccionado
-		var valueMenuItem = undefined;			// valor que se guarda en la llave
-		var keySubmenuItem = "submenuItemId";
-		var valueSubmenuItem = undefined;
+		// "key" y "value", cookies que permiten al menú-sidebar no perder...
+		// ... información de los items seleccionados cuando haya reload
+		var keySession = {
+			menuItemInd	: "menuItemInd",	// session para el menu-item seleccionado, independiente a todo
+			submenuItem : "submenuItem",	// session para el submenu-item seleccionado
+			menuItem 	: "menuItem"		// session para el menu-item seleccionado directamente relacionado al submenu-item
+		}
+		var valueSession = {
+			menuItemInd	: undefined,
+			submenuItem : undefined,
+			menuItem 	: undefined
+		}
 
 		/** Muestra el menu */
 		function showMenu() {
-			if(window.innerWidth > SizeDevice.extraSmall)
+			if(window.innerWidth > SIZE_DEVICE.extraSmall)
 				menuSidebar.style.transform = "translate(0, 0)";
 			else
 				menuSidebar.style.transform = "translate(0, 0)";
@@ -37,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 		/** Oculta el menu */
 		function hideMenu() {
-			if(window.innerWidth > SizeDevice.extraSmall)
+			if(window.innerWidth > SIZE_DEVICE.extraSmall)
 				menuSidebar.style.transform = "translate(-101%, 0)";
 			else
 				menuSidebar.style.transform = "translate(0, -101%)";
@@ -70,8 +86,8 @@ document.addEventListener('DOMContentLoaded', function() {
 							this.querySelector("i.i2").classList.add("zmdi-chevron-up");
 						}
 						// Guarda en memoria el menu-item seleccionado
-						valueMenuItem = this.dataset.menuItemId;
-						sessionStorage.setItem(keyMenuItem, valueMenuItem);
+						valueSession.menuItemInd = this.dataset.menuItemId;
+						sessionStorage.setItem(keySession.menuItemInd, valueSession.menuItemInd);
 					} 
 					else {	// Cuando está activo el menú (abiertos los submenus)
 						this.classList.remove("active");
@@ -82,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
 							this.querySelector("i.i2").classList.add("zmdi-chevron-down");
 						}
 						// Elimina de memoria el item seleccionado
-						sessionStorage.removeItem(keyMenuItem);
+						sessionStorage.removeItem(keySession.menuItemInd);
 					}
 				}, false);
 			}
@@ -92,9 +108,15 @@ document.addEventListener('DOMContentLoaded', function() {
 			for(var submenuItem of submenuItemList) {
 				submenuItem.addEventListener('click', function() {
 					this.classList.add("active");
-					// Guarda en memoria el menu-item seleccionado
-					valueSubmenuItem = this.dataset.submenuItemId;
-					sessionStorage.setItem(keySubmenuItem, valueSubmenuItem);
+					// Guarda en memoria el submenu-item seleccionado
+					valueSession.submenuItem = this.dataset.submenuItemId;
+					sessionStorage.setItem(keySession.submenuItem, valueSession.submenuItem);
+
+					var parent = this.parentElement;
+					var menuItem = parent.previousElementSibling;
+					// Guarda en memoria el menu-item seleccionado del submenu-item.
+					valueSession.menuItem = menuItem.dataset.menuItemId;
+					sessionStorage.setItem(keySession.menuItem, valueSession.menuItem);
 				});
 			}
 		}
@@ -138,10 +160,9 @@ document.addEventListener('DOMContentLoaded', function() {
 			for(var element of elementList)
 				element.classList.add(nameClass);
 		}
-
 		/** Reposicionamiento del menu(sidebar) */
 		function reposicionarMenu() {
-			if(!estadoMenu && (window.innerWidth > SizeDevice.extraSmall))
+			if(!estadoMenu && (window.innerWidth > SIZE_DEVICE.extraSmall))
 				menuSidebar.style.transform = "translate(-101%, 0)";
 			else
 				menuSidebar.style.transform = "translate(0, -101%)";
@@ -177,18 +198,153 @@ document.addEventListener('DOMContentLoaded', function() {
 			},
 			/** Restaura los items seleccionados del menú o submenú cada vez que se hace refresh */
 			restaurarItemsSeleccionados: function() {
-				// Cuando haya algo seleccionado
-				if(sessionStorage.length > 0) {
-					valueMenuItem = sessionStorage.getItem(keyMenuItem);
-					var menuItem = document.querySelector("a.menu-item[data-menu-item-id='"+valueMenuItem+"']");
+		
+				valueSession.menuItemInd = sessionStorage.getItem(keySession.menuItemInd);
+				valueSession.submenuItem = sessionStorage.getItem(keySession.submenuItem);
+				valueSession.menuItem = sessionStorage.getItem(keySession.menuItem);
+				
+				if(valueSession.menuItemInd) {
+					var menuItem = document.querySelector("a.menu-item[data-menu-item-id='"+valueSession.menuItemInd+"']");
 					var submenuBox = menuItem.nextElementSibling;
-
-					valueSubmenuItem = sessionStorage.getItem(keySubmenuItem);
-					var submenuItem = submenuBox.querySelector("a.submenu-item[data-submenu-item-id='"+valueSubmenuItem+"']");
 					restaurarMenuItem(menuItem, submenuBox);
+				}
+				if(valueSession.submenuItem && valueSession.menuItem) {
+					var menuItem = document.querySelector("a.menu-item[data-menu-item-id='"+valueSession.menuItem+"']");
+					var submenuBox = menuItem.nextElementSibling;
+					var submenuItem = submenuBox.querySelector("a.submenu-item[data-submenu-item-id='"+valueSession.submenuItem+"']");
 					restaurarSubmenuItem(submenuItem);
 				}
 			}
 		}		
+	}
+	function Form() {
+		var forms = document.querySelectorAll('.needs-validation');
+		
+		return {
+			/* Validación de todos los inputs excepto los selects (Bootstrap css style)*/
+			validation: function() {
+				Array.prototype.slice.call(forms).forEach(function (form) {
+			      	form.addEventListener('submit', function (event) {
+			        	if (!form.checkValidity()) {
+			        	 	event.preventDefault();
+			         	 	event.stopPropagation();
+			        	}
+			        	form.classList.add('was-validated');
+			      	}, false);
+				});
+			}
+		}
+	}
+
+	function FormTrabajador() {
+		var formTrabajadorEl = document.getElementById('form-trabajador');
+		var selectList = {
+			all 			: document.querySelectorAll('select.mySelectr'),
+			lugarNacimiento : document.querySelectorAll('select.mySelectr.lugar-nacimiento'),
+			cargo 			: document.querySelector('select.mySelectr.cargoo')
+		};
+		var selectorList = {
+			lugarNacimiento : [],
+			cargo 			: undefined
+		};
+		/**
+		 * Da estilo a los select-box con el plugin "Selectr" 
+		 */
+		function selectrPluginStyle() {
+			// Select-boxes para el lugar de nacimiento (Region, Provincia, Distrito)
+			for(var select of selectList.lugarNacimiento)
+				selectorList.lugarNacimiento.push(newSelectrDefault(select));
+			
+			// Select para el Cargo
+			selectorList.cargo = newSelectrDefault(selectList.cargo);
+		}
+		/*
+		 * Llena los campos selects del 'lugar de nacimiento' cada que se...
+		 * ...seleccione una opción (selects combinados) de (Region, Provincia, Distrito)
+		 * NOTE: selectorList.lugarNacimiento => De tamaño Array(3) -->
+		 * 									[0] => Region, [1] => Provincia, [2] => Distrito
+		 */
+		function llenarDataSelects() {
+		 	// Para PROVINCIA
+		 	var provincias = Object.keys(DEPARTAMENTO_PUNO);
+			for(var provinciaName of provincias) {
+				selectorList.lugarNacimiento[1].add({
+					value: provinciaName,
+					text: provinciaName
+				});
+			}
+			// Para DISTRITO
+			selectorList.lugarNacimiento[1].on('selectr.change', function(option) {
+				var distritos = DEPARTAMENTO_PUNO[this.getValue()];
+				selectorList.lugarNacimiento[2].removeAll();
+				for(var distritoName of distritos) {
+					selectorList.lugarNacimiento[2].add({
+						value: distritoName,
+						text: distritoName
+					});
+				}
+			});
+		}
+		/*
+		 * Validación de los selects mediante estilos CSS
+		 */
+		 /* !!!! maybe this code can be located in the main FORM!!!! OJO OJO*/
+		function validationSelects() {
+		 	formTrabajadorEl.addEventListener('submit', function() {
+				// Validación inicial de todos los select
+				for(var select of selectList.all) {
+					var parentContainer = select.parentElement;
+					var selectContainer = parentContainer.querySelector('.selectr-selected');
+					
+					if(select.validity.valid)
+						selectContainer.classList.add('selectr-valid');
+					else
+						selectContainer.classList.add('selectr-invalid');
+				}
+
+				// Validación perpetua de los selects
+				for(var select of selectList.all) {
+					select.addEventListener('change', function() {
+						var parentContainer = this.parentElement;
+						var selectContainer = parentContainer.querySelector('.selectr-selected');
+						
+						if(this.validity.valid) {
+							selectContainer.classList.remove('selectr-invalid');
+							selectContainer.classList.add('selectr-valid');
+						}
+						else {
+							selectContainer.classList.remove('selectr-valid');
+							selectContainer.classList.add('selectr-invalid');
+						}	
+					}, false);
+				}
+			}, false);
+		}
+		/*
+		 * Crea un nuevo selector de la clase Selectr
+		 * @param{HTMLElement} element
+		 * @return[newSelectrObject]
+		 */
+		function newSelectrDefault(element) {
+			var newSelector = new Selectr(element, {
+				searchable: false,
+				placeholder: "Seleccione...",
+				messages: {
+					noResults: "No resultados",
+					noOptions: "No options"
+				}
+			});
+			return newSelector;
+		}
+		return {
+		 	selectBoxes: function() {
+		 		// Mientras el item del menú 'Crear-trabajador' no esté activa
+		 		// if(selectList.lugarNacimiento.length > 0) {
+			 		selectrPluginStyle();
+			 		llenarDataSelects();	
+			 		validationSelects();
+		 		// }
+		 	}
+		}
 	}
 });

@@ -42,7 +42,7 @@
 					<i class="zmdi zmdi-circle"></i>
 					<span>Inicio</span>
 				</a>
-				<a class="submenu-item" data-submenu-item-id="2" href="?controller=Trabajador&action=formCrearTrabajador">
+				<a class="submenu-item" data-submenu-item-id="2" href="?controller=Trabajador&action=formularioTrabajador">
 					<i class="zmdi zmdi-circle"></i>
 					<span>Crear trabajador</span>
 				</a>

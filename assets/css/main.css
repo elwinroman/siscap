@@ -13,8 +13,7 @@ main {
 	display: flex;
 	flex-direction: column;
 }
-
-/* - - - - Section (navbar) - - - - */
+/** Section (navbar) */
 header.mynavbar {
 	display: flex;
 	align-items: center;
@@ -42,9 +41,9 @@ header h3.nv-title {
 	color: white;
 }
 
-/* - - - - Section (sidebar) - - - - */
+/** Section (menu-sidebar) */
 nav#sidebar-menu {
-	z-index: 1;
+	z-index: 12000;
 	position: fixed;
 	overflow: auto;
 	top: 0;
@@ -76,7 +75,7 @@ div.menu-title i {
 	cursor: pointer;
 	font-size: 25px;	/*size-icon*/
 }
-/* - - user-info(ui) - - */
+/** user-info(ui) */
 nav div.user-info figure {
 	padding: 10px;
 	text-align: center;
@@ -96,7 +95,7 @@ div.ui div.menu-setting-options i {
 	cursor: pointer;
 	padding: 0 20px;
 }
-/* - - menu-box - - */
+/** menu-box */
 nav div.full-menu { padding-top: 10px; }
 nav div.menu-box {
 	display: flex;
@@ -125,7 +124,7 @@ a.menu-item i.i2 {
 	flex: 0 2 20%;
 	text-align: center;
 }		
-/* - - submenu-box - - */
+/** submenu-box */
 nav div.menu-box div.submenu-box {
 	height: 0;
 	transition-property: height;
@@ -136,7 +135,7 @@ a.submenu-item {
 	display: flex;
 	align-items: center;
 	height: 30px;
-	font-family: Arial,Helvetica,Verdana;
+	font-family: Arial, Helvetica, Verdana;
 	color: inherit;
 	transition-property: all;
 }
@@ -148,16 +147,109 @@ a.submenu-item i {
 }
 a.submenu-item span { flex: 1 1 72%; }
 
-/* - - - Section (contenido) - - - */
+/** Section (contenido) */
 section.contenido {
+	background: #f7f7f7;
 	overflow: auto;
 	height: 93vh !important;
 	padding: 15px;
-	font-family: "Roboto",Arial,Helvetica,Verdana !important;
+	font-family: "Roboto", Arial, Helvetica, Verdana !important;
 }
 
-/* - - - - - Responsive - - - - - */
-/* pantalla-super-pequeña */
+/** Formulario Style */
+form {
+	font-size: 15px;
+}
+div.box {
+	background: white;
+	border-radius: 5px;
+	box-shadow: 2px 2px 1px 0px #f5f5f5;
+	padding: 20px;
+}
+div.box:first-child {
+	margin-right: 15px;
+}
+div.box div.field {
+	margin-bottom: 8px;
+	/*border: 1px solid red;*/
+}
+label:not(.gender) {
+	margin-bottom: 2px;
+	/*font-family: "Roboto bold";*/
+	/*color: #333333;*/
+}
+div.box > div.titulo {
+	font-family: "Roboto bold";
+	/*font-size: 1px;*/
+	color: darkblue;
+}
+/*test code*/
+button {
+	font-size: inherit !important;
+}
+button i {
+	font-size: 17px !important;	
+}
+div.btn-group {
+	display: block;
+	text-align: center;
+	/*margin-top: ;*/
+}
+/*end of test code*/
+/** Formulario-TRABAJADOR */
+#form-trabajador h1 {
+	text-align: center;
+}
+#form-trabajador .multiple-input {	/* en una fila */
+	/*min-width: 150px !important;*/
+	min-width: 180px !important;
+	max-width: 210px !important;
+}
+#form-trabajador select {
+	width: 100%;
+	height: 30px !important;
+}
+#form-trabajador #telefono {
+	width: 50%;
+}
+
+/* selectr plugin config */
+.selectr-selected {
+	min-height: calc(1.5em + .5rem + 2px);
+    padding: .25rem .5rem;
+	border: 1px solid #ced4da;
+	border-radius: .2rem;
+	font-size: .875rem;
+	color: #495057;
+}
+.selectr-container.open .selectr-selected,
+.selectr-container.open.inverted .selectr-selected,
+.selectr-selected:focus {
+	color: #495057;
+	border-color: #80bdff;
+	outline: 0;
+	box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25);
+	z-index: 11000;
+}
+.selectr-selected.selectr-valid {
+	border: 1px solid #28a745;
+}
+.selectr-container.open.inverted .selectr-selected.selectr-valid:focus,
+.selectr-selected.selectr-valid:focus {
+	border: 1px solid #28a745;
+	box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+.selectr-selected.selectr-invalid {
+	border: 1px solid #dc3545;
+}
+.selectr-container.open.inverted .selectr-selected.selectr-invalid:focus,
+.selectr-selected.selectr-invalid:focus {
+	border: 1px solid #dc3545;
+	box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/** RESPONSIVE 
+* pantalla-super-pequeña */
 @media screen and (max-width: 400px) {
 	nav#sidebar-menu {
 		width: 100vw;
