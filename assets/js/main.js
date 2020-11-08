@@ -14,9 +14,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	var form = Form();
 	form.validation();
+	form.validationAllSelects();
 
 	var formTrabajador = FormTrabajador();
 	formTrabajador.selectBoxes();
+
+	var formCargo = FormCargo();
+	formCargo.selectBoxes();
 
 	function Menu() {
 
@@ -218,12 +222,12 @@ document.addEventListener('DOMContentLoaded', function() {
 		}		
 	}
 	function Form() {
-		var forms = document.querySelectorAll('.needs-validation');
-		
+		var formsList = document.querySelectorAll('.needs-validation');
+		var selectList = document.querySelectorAll('select.mySelectr');
 		return {
 			/* Validación de todos los inputs excepto los selects (Bootstrap css style)*/
 			validation: function() {
-				Array.prototype.slice.call(forms).forEach(function (form) {
+				Array.prototype.slice.call(formsList).forEach(function (form) {
 			      	form.addEventListener('submit', function (event) {
 			        	if (!form.checkValidity()) {
 			        	 	event.preventDefault();
@@ -232,16 +236,67 @@ document.addEventListener('DOMContentLoaded', function() {
 			        	form.classList.add('was-validated');
 			      	}, false);
 				});
+			},
+			/*
+			 * Crea un nuevo selector de la clase Selectr
+			 * @param{HTMLElement} element
+			 * @return[newSelectrObject]
+			 */
+			newSelectrDefault: function(element) {
+				var newSelector = new Selectr(element, {
+					searchable: false,
+					placeholder: "Seleccione...",
+					messages: {
+						noResults: "No resultados",
+						noOptions: "No options"
+					}
+				});
+				return newSelector;
+			},
+			/*
+			 * Validación de todos los selects mediante estilos CSS
+			 */
+			validationAllSelects: function() {
+				for(var form of formsList) {
+				 	form.addEventListener('submit', function() {
+						// Validación inicial de todos los select
+						for(var select of selectList) {
+							var parentContainer = select.parentElement;
+							var selectContainer = parentContainer.querySelector('.selectr-selected');
+							
+							if(select.validity.valid)
+								selectContainer.classList.add('selectr-valid');
+							else
+								selectContainer.classList.add('selectr-invalid');
+						}
+
+						// Validación perpetua de los selects
+						for(var select of selectList) {
+							select.addEventListener('change', function() {
+								var parentContainer = this.parentElement;
+								var selectContainer = parentContainer.querySelector('.selectr-selected');
+								
+								if(this.validity.valid) {
+									selectContainer.classList.remove('selectr-invalid');
+									selectContainer.classList.add('selectr-valid');
+								}
+								else {
+									selectContainer.classList.remove('selectr-valid');
+									selectContainer.classList.add('selectr-invalid');
+								}	
+							}, false);
+						}
+					}, false);
+			 	}
 			}
 		}
 	}
 
 	function FormTrabajador() {
-		var formTrabajadorEl = document.getElementById('form-trabajador');
+		// var formTrabajadorEl = document.getElementById('form-trabajador');
 		var selectList = {
-			all 			: document.querySelectorAll('select.mySelectr'),
-			lugarNacimiento : document.querySelectorAll('select.mySelectr.lugar-nacimiento'),
-			cargo 			: document.querySelector('select.mySelectr.cargoo')
+			lugarNacimiento : document.querySelectorAll('#form-trabajador .mySelectr.lugar-nacimiento'),
+			cargo 	: document.querySelector('#form-trabajador .mySelectr.asignar-cargo')
 		};
 		var selectorList = {
 			lugarNacimiento : [],
@@ -253,10 +308,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		function selectrPluginStyle() {
 			// Select-boxes para el lugar de nacimiento (Region, Provincia, Distrito)
 			for(var select of selectList.lugarNacimiento)
-				selectorList.lugarNacimiento.push(newSelectrDefault(select));
-			
+				selectorList.lugarNacimiento.push(form.newSelectrDefault(select));
 			// Select para el Cargo
-			selectorList.cargo = newSelectrDefault(selectList.cargo);
+			selectorList.cargo = form.newSelectrDefault(selectList.cargo);
 		}
 		/*
 		 * Llena los campos selects del 'lugar de nacimiento' cada que se...
@@ -285,66 +339,38 @@ document.addEventListener('DOMContentLoaded', function() {
 				}
 			});
 		}
-		/*
-		 * Validación de los selects mediante estilos CSS
-		 */
-		 /* !!!! maybe this code can be located in the main FORM!!!! OJO OJO*/
-		function validationSelects() {
-		 	formTrabajadorEl.addEventListener('submit', function() {
-				// Validación inicial de todos los select
-				for(var select of selectList.all) {
-					var parentContainer = select.parentElement;
-					var selectContainer = parentContainer.querySelector('.selectr-selected');
-					
-					if(select.validity.valid)
-						selectContainer.classList.add('selectr-valid');
-					else
-						selectContainer.classList.add('selectr-invalid');
-				}
-
-				// Validación perpetua de los selects
-				for(var select of selectList.all) {
-					select.addEventListener('change', function() {
-						var parentContainer = this.parentElement;
-						var selectContainer = parentContainer.querySelector('.selectr-selected');
-						
-						if(this.validity.valid) {
-							selectContainer.classList.remove('selectr-invalid');
-							selectContainer.classList.add('selectr-valid');
-						}
-						else {
-							selectContainer.classList.remove('selectr-valid');
-							selectContainer.classList.add('selectr-invalid');
-						}	
-					}, false);
-				}
-			}, false);
-		}
-		/*
-		 * Crea un nuevo selector de la clase Selectr
-		 * @param{HTMLElement} element
-		 * @return[newSelectrObject]
-		 */
-		function newSelectrDefault(element) {
-			var newSelector = new Selectr(element, {
-				searchable: false,
-				placeholder: "Seleccione...",
-				messages: {
-					noResults: "No resultados",
-					noOptions: "No options"
-				}
-			});
-			return newSelector;
-		}
 		return {
 		 	selectBoxes: function() {
 		 		// Mientras el item del menú 'Crear-trabajador' no esté activa
-		 		// if(selectList.lugarNacimiento.length > 0) {
+		 		if(selectList.lugarNacimiento.length > 0) {
 			 		selectrPluginStyle();
-			 		llenarDataSelects();	
-			 		validationSelects();
-		 		// }
+			 		llenarDataSelects();
+		 		}
 		 	}
 		}
+	}
+
+	function FormCargo() {
+		// var formCargoEl = document.getElementById('form-cargo');
+		var selectList = {
+			regimenLaboral: document.querySelector('#form-cargo .mySelectr.regimen-select'),
+			oficinas: document.querySelectorAll('#form-cargo .mySelectr.asignar-oficina')
+		};
+		var selectorList = {
+			oficinas: []
+		}
+		function selectrPluginStyle() {
+			// Select para 'regimen laboral'
+			form.newSelectrDefault(selectList.regimenLaboral);
+			// Select-boxes para el la asignación de oficinas (Oficina, Suboficina)
+			for(var select of selectList.oficinas)
+				selectorList.oficinas.push(form.newSelectrDefault(select));
+		}	
+		return {
+			selectBoxes: function() {
+				selectrPluginStyle();
+			}
+		}
+
 	}
 });

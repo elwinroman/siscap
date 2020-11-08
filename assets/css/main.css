@@ -175,12 +175,9 @@ div.box div.field {
 }
 label:not(.gender) {
 	margin-bottom: 2px;
-	/*font-family: "Roboto bold";*/
-	/*color: #333333;*/
 }
 div.box > div.titulo {
 	font-family: "Roboto bold";
-	/*font-size: 1px;*/
 	color: darkblue;
 }
 /*test code*/
@@ -193,7 +190,6 @@ button i {
 div.btn-group {
 	display: block;
 	text-align: center;
-	/*margin-top: ;*/
 }
 /*end of test code*/
 /** Formulario-TRABAJADOR */
@@ -201,7 +197,6 @@ div.btn-group {
 	text-align: center;
 }
 #form-trabajador .multiple-input {	/* en una fila */
-	/*min-width: 150px !important;*/
 	min-width: 180px !important;
 	max-width: 210px !important;
 }

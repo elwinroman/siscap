@@ -111,7 +111,7 @@
 			<div class="titulo">Asignar cargo</div>
 			<div class="field">		<!-- Campo (Cargo) -->
 				<label for="cargo">Cargo</label><br>
-				<select class="mySelectr cargoo" name="cargo" required>
+				<select class="mySelectr asignar-cargo" name="cargo" required>
 					<!-- <option value="2" selected>Gerente de sistemas</option> -->
   				</select>
 			</div>
