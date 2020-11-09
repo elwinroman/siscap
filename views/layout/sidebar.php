@@ -80,7 +80,7 @@
 					<i class="zmdi zmdi-circle"></i>
 					<span>Inicio</span>
 				</a>
-				<a class="submenu-item" data-submenu-item-id="2" href="?controller=Oficina&action=formCrearOficina">
+				<a class="submenu-item" data-submenu-item-id="2" href="?controller=Oficina&action=formularioOficina">
 					<i class="zmdi zmdi-circle"></i>
 					<span>Crear oficina</span>
 				</a>

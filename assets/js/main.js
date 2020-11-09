@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	var formCargo = FormCargo();
 	formCargo.selectBoxes();
 
+	var formOficina = FormOficina();
+	formOficina.selectBoxes();
+
 	function Menu() {
 
 		var menuSidebar = document.getElementById("sidebar-menu");
@@ -243,15 +246,18 @@ document.addEventListener('DOMContentLoaded', function() {
 			 * @return[newSelectrObject]
 			 */
 			newSelectrDefault: function(element) {
-				var newSelector = new Selectr(element, {
-					searchable: false,
-					placeholder: "Seleccione...",
-					messages: {
-						noResults: "No resultados",
-						noOptions: "No options"
-					}
-				});
-				return newSelector;
+				if(document.body.contains(element)) {
+					var newSelector = new Selectr(element, {
+						searchable: false,
+						placeholder: "Seleccione...",
+						messages: {
+							noResults: "No resultados",
+							noOptions: "No options"
+						}
+					});
+					return newSelector;
+				}
+				return null;
 			},
 			/*
 			 * Validación de todos los selects mediante estilos CSS
@@ -341,11 +347,11 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 		return {
 		 	selectBoxes: function() {
+			 	selectrPluginStyle();
 		 		// Mientras el item del menú 'Crear-trabajador' no esté activa
-		 		if(selectList.lugarNacimiento.length > 0) {
-			 		selectrPluginStyle();
+		 		if(selectList.lugarNacimiento.length > 0)
 			 		llenarDataSelects();
-		 		}
+		 		
 		 	}
 		}
 	}
@@ -368,9 +374,23 @@ document.addEventListener('DOMContentLoaded', function() {
 		}	
 		return {
 			selectBoxes: function() {
+				// if(selectList.oficinas.length > 0)
+					selectrPluginStyle();
+			}
+		}
+	}
+
+	function FormOficina() {
+		var selectOficina = document.getElementById('oficina-jefe');
+		// var selectorOficina = form.newSelectrDefault(selectOficina);
+		function selectrPluginStyle() {
+			// Select para 'oficina-padre'
+			form.newSelectrDefault(selectOficina);
+		}
+		return {
+			selectBoxes: function() {
 				selectrPluginStyle();
 			}
 		}
-
 	}
 });
