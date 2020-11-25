@@ -1,7 +1,7 @@
 <h1>FORMULARIO PARA CREAR CARGO</h1>
 <form id="form-cargo" action="" class="container-fluid needs-validation" novalidate autocomplete="off">
 	<div class="row">
-		<div class="col-sm box">
+		<div class="col-md box">
 			<div class="titulo">Información del cargo</div>
 			<div class="field">		<!-- Field NOMBRE -->
 				<label for="nombre">Nombres</label>
@@ -10,7 +10,7 @@
 				<div class="invalid-feedback">Something is wrong.</div>
 			</div>
 			
-			<div class="row"> 
+			<div class="row align-items-end"> 
 				<div class="col field">		<!-- Field NRO-PLAZA -->
 					<label for="nr-plaza">Nro de plaza</label>
 					<input class="form-control form-control-sm" type="text" name="nro-plaza" maxlength="3" pattern="\s*[0-9]{3}\s*" required>
@@ -23,7 +23,7 @@
 	  				</select>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row align-items-end">
 			<div class="col field">	 <!-- Field CARGO DE CONFIANZA -->
 				<label class="d-block" for="cargo-confianza">¿Cargo de confianza?</label>
 				<div class="form-check form-check-inline">
@@ -48,7 +48,7 @@
 			</div>
 			</div>
 		</div>
-		<div class="col-sm box">
+		<div class="col-md box">
 			<div class="titulo">Asignar oficina</div>
 			<div class="field">		<!-- Field OFICINA -->
 				<label for="oficina">Oficina</label><br>

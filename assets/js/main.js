@@ -1,30 +1,29 @@
 document.addEventListener('DOMContentLoaded', function() {
 	"use strict";
 
-	var menu = Menu();
+	var App = {
+		menu: function() {
+			var menu = Menu();
+			menu.clickMenuOpenIcon();
+			menu.clickMenuCloseIcon();
+			menu.clickAnyPlace();
+			menu.slideSubmenus();
+			menu.restaurarItemsSeleccionados();
+		},
+		forms: function() {
+			var formulario = Form();
+			formulario.validation();
+			formulario.validationAllSelects();
+
+			FormTrabajador().selectrStyle();
+			FormCargo().selectrStyle();
+			FormOficina().selectHandler();
+		}
+	};
+	App.menu();
+	App.forms();
 	
-	(function runMenu() {
-		menu.clickMenuOpenIcon();
-		menu.clickMenuCloseIcon();
-		menu.clickAnyPlace();
-		// menu.resizeEvent();
-		menu.slideSubmenus();
-		menu.restaurarItemsSeleccionados();
-	})();
-
-	var form = Form();
-	form.validation();
-	form.validationAllSelects();
-
-	var formTrabajador = FormTrabajador();
-	formTrabajador.selectBoxes();
-
-	var formCargo = FormCargo();
-	formCargo.selectBoxes();
-
-	var formOficina = FormOficina();
-	formOficina.selectBoxes();
-
+	/////////////////////////////////////////////////////////////////////////
 	function Menu() {
 
 		var menuSidebar = document.getElementById("sidebar-menu");
@@ -37,8 +36,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		var estadoMenu = true;				// true (menu activo), false (menu oculto)
 		
-		// "key" y "value", cookies que permiten al menú-sidebar no perder...
-		// ... información de los items seleccionados cuando haya reload
+		// "key" y "value", cookies que permiten al menú-sidebar no perder
+		// información de los items seleccionados cuando haya reload
 		var keySession = {
 			menuItemInd	: "menuItemInd",	// session para el menu-item seleccionado, independiente a todo
 			submenuItem : "submenuItem",	// session para el submenu-item seleccionado
@@ -52,11 +51,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		/** Muestra el menu */
 		function showMenu() {
+			estadoMenu = true;
 			if(window.innerWidth > SIZE_DEVICE.extraSmall)
 				menuSidebar.style.transform = "translate(0, 0)";
 			else
 				menuSidebar.style.transform = "translate(0, 0)";
-			estadoMenu = true;
 		}
 		/** Oculta el menu */
 		function hideMenu() {
@@ -161,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		/** 
 		 * Añade nombres de clases a una lista de elementos 
 		 * @param {HTMLCollection} elementList => Lista de nodos
-		 * @param {string} nameClass			=> Nombre de clase
+		 * @param {string} nameClass		   => Nombre de clase
 		 */
 		function myAddClass(elementList, nameClass) {
 			for(var element of elementList)
@@ -226,9 +225,28 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 	function Form() {
 		var formsList = document.querySelectorAll('.needs-validation');
-		var selectList = document.querySelectorAll('select.mySelectr');
+		var selectList = document.querySelectorAll('select');
+		/**
+		 * Validación individual de cada select
+		 * @param{DOMElement} select
+		 */
+		function validacionIndividual(select) {
+			var parentContainer = select.parentElement;
+			var selectContainer = parentContainer.querySelector('.selectr-selected');
+			
+			if(select.validity.valid) {
+				selectContainer.classList.remove('selectr-invalid');
+				selectContainer.classList.add('selectr-valid');
+			}
+			else {
+				selectContainer.classList.remove('selectr-valid');
+				selectContainer.classList.add('selectr-invalid');
+			}
+		}
 		return {
-			/* Validación de todos los inputs excepto los selects (Bootstrap css style)*/
+			/** 
+			 * Validación de todos los inputs excepto los selects (Bootstrap css style) 
+			 */
 			validation: function() {
 				Array.prototype.slice.call(formsList).forEach(function (form) {
 			      	form.addEventListener('submit', function (event) {
@@ -240,58 +258,21 @@ document.addEventListener('DOMContentLoaded', function() {
 			      	}, false);
 				});
 			},
-			/*
-			 * Crea un nuevo selector de la clase Selectr
-			 * @param{HTMLElement} element
-			 * @return[newSelectrObject]
-			 */
-			newSelectrDefault: function(element) {
-				if(document.body.contains(element)) {
-					var newSelector = new Selectr(element, {
-						searchable: false,
-						placeholder: "Seleccione...",
-						messages: {
-							noResults: "No resultados",
-							noOptions: "No options"
-						}
-					});
-					return newSelector;
-				}
-				return null;
-			},
-			/*
-			 * Validación de todos los selects mediante estilos CSS
+			/** 
+			 * Validación de todos los selects con estilos CSS 
 			 */
 			validationAllSelects: function() {
 				for(var form of formsList) {
 				 	form.addEventListener('submit', function() {
-						// Validación inicial de todos los select
-						for(var select of selectList) {
-							var parentContainer = select.parentElement;
-							var selectContainer = parentContainer.querySelector('.selectr-selected');
-							
-							if(select.validity.valid)
-								selectContainer.classList.add('selectr-valid');
-							else
-								selectContainer.classList.add('selectr-invalid');
-						}
+						// Validación inicial de todos los selects
+						selectList.forEach( (select) => { validacionIndividual(select); });
 
 						// Validación perpetua de los selects
-						for(var select of selectList) {
+						selectList.forEach( (select) => {
 							select.addEventListener('change', function() {
-								var parentContainer = this.parentElement;
-								var selectContainer = parentContainer.querySelector('.selectr-selected');
-								
-								if(this.validity.valid) {
-									selectContainer.classList.remove('selectr-invalid');
-									selectContainer.classList.add('selectr-valid');
-								}
-								else {
-									selectContainer.classList.remove('selectr-valid');
-									selectContainer.classList.add('selectr-invalid');
-								}	
+								validacionIndividual(this);
 							}, false);
-						}
+						});
 					}, false);
 			 	}
 			}
@@ -299,97 +280,130 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	function FormTrabajador() {
-		// var formTrabajadorEl = document.getElementById('form-trabajador');
 		var selectList = {
-			lugarNacimiento : document.querySelectorAll('#form-trabajador .mySelectr.lugar-nacimiento'),
-			cargo 	: document.querySelector('#form-trabajador .mySelectr.asignar-cargo')
+			lugarNacimiento: document.querySelectorAll('#form-trabajador .mySelectr.lugar-nacimiento'),
+			cargo: document.querySelector('#form-trabajador .mySelectr.asignar-cargo')
 		};
 		var selectorList = {
-			lugarNacimiento : [],
-			cargo 			: undefined
+			lugarNacimiento: [],
+			cargo: undefined
 		};
 		/**
-		 * Da estilo a los select-box con el plugin "Selectr" 
-		 */
-		function selectrPluginStyle() {
-			// Select-boxes para el lugar de nacimiento (Region, Provincia, Distrito)
-			for(var select of selectList.lugarNacimiento)
-				selectorList.lugarNacimiento.push(form.newSelectrDefault(select));
-			// Select para el Cargo
-			selectorList.cargo = form.newSelectrDefault(selectList.cargo);
-		}
-		/*
-		 * Llena los campos selects del 'lugar de nacimiento' cada que se...
-		 * ...seleccione una opción (selects combinados) de (Region, Provincia, Distrito)
-		 * NOTE: selectorList.lugarNacimiento => De tamaño Array(3) -->
-		 * 									[0] => Region, [1] => Provincia, [2] => Distrito
+		 * Llena de opciones los selects del 'lugar de nacimiento' cada que se seleccione una opción
+		 * opción (selects combinados) de (Region, Provincia, Distrito)
+		 * [0] => Region, [1] => Provincia, [2] => Distrito
 		 */
 		function llenarDataSelects() {
-		 	// Para PROVINCIA
-		 	var provincias = Object.keys(DEPARTAMENTO_PUNO);
-			for(var provinciaName of provincias) {
-				selectorList.lugarNacimiento[1].add({
-					value: provinciaName,
-					text: provinciaName
+			if(selectList.lugarNacimiento.length > 0) {
+			 	// Para PROVINCIA
+			 	var provincias = Object.keys(DEPARTAMENTO_PUNO);
+			 	provincias.forEach(function(provinciaName) {
+					selectorList.lugarNacimiento[1].add({
+						value: provinciaName,
+						text: provinciaName
+					});
+				});
+				// Para DISTRITO
+				selectorList.lugarNacimiento[1].on('selectr.change', function(option) {
+					var distritos = DEPARTAMENTO_PUNO[this.getValue()];
+					selectorList.lugarNacimiento[2].removeAll();
+					distritos.forEach(function(distritoName) {
+						selectorList.lugarNacimiento[2].add({
+							value: distritoName,
+							text: distritoName
+						});
+					});
 				});
 			}
-			// Para DISTRITO
-			selectorList.lugarNacimiento[1].on('selectr.change', function(option) {
-				var distritos = DEPARTAMENTO_PUNO[this.getValue()];
-				selectorList.lugarNacimiento[2].removeAll();
-				for(var distritoName of distritos) {
-					selectorList.lugarNacimiento[2].add({
-						value: distritoName,
-						text: distritoName
-					});
-				}
-			});
 		}
 		return {
-		 	selectBoxes: function() {
-			 	selectrPluginStyle();
-		 		// Mientras el item del menú 'Crear-trabajador' no esté activa
-		 		if(selectList.lugarNacimiento.length > 0)
-			 		llenarDataSelects();
-		 		
+		 	selectrStyle: function() {
+			 	// Selectr para el lugar de nacimiento (Region, Provincia, Distrito)
+				for(var select of selectList.lugarNacimiento)
+					selectorList.lugarNacimiento.push(Plugin.selectr(select));
+				// Select para el Cargo
+				selectorList.cargo = Plugin.selectr(selectList.cargo);
+				llenarDataSelects();
 		 	}
 		}
 	}
-
 	function FormCargo() {
-		// var formCargoEl = document.getElementById('form-cargo');
 		var selectList = {
 			regimenLaboral: document.querySelector('#form-cargo .mySelectr.regimen-select'),
 			oficinas: document.querySelectorAll('#form-cargo .mySelectr.asignar-oficina')
 		};
-		var selectorList = {
-			oficinas: []
-		}
-		function selectrPluginStyle() {
-			// Select para 'regimen laboral'
-			form.newSelectrDefault(selectList.regimenLaboral);
-			// Select-boxes para el la asignación de oficinas (Oficina, Suboficina)
-			for(var select of selectList.oficinas)
-				selectorList.oficinas.push(form.newSelectrDefault(select));
-		}	
 		return {
-			selectBoxes: function() {
-				// if(selectList.oficinas.length > 0)
-					selectrPluginStyle();
+			selectrStyle: function() {
+				// Select para 'regimen laboral'
+				Plugin.selectr(selectList.regimenLaboral);
+				// Select-boxes para el la asignación de oficinas (Oficina, Suboficina)
+				for(var select of selectList.oficinas)
+					Plugin.selectr(select);
 			}
 		}
 	}
-
 	function FormOficina() {
-		var selectOficina = document.getElementById('oficina-jefe');
-		// var selectorOficina = form.newSelectrDefault(selectOficina);
-		function selectrPluginStyle() {
-			// Select para 'oficina-padre'
-			form.newSelectrDefault(selectOficina);
+		var checkbox = document.querySelector("#form-oficina input[name='check']");
+		var labelSelectOficina = document.querySelector("#form-oficina label[for='oficina']");
+		var selectOficina = document.getElementById('sct-oficina-jefe');
+		var selectorOficina = Plugin.selectr(selectOficina);
+
+		/**
+		 * Llena con datos select-oficina
+		 */
+		function llenarSelectOficina() {
+			var ajaxConfig = {
+				method: "POST",
+				url: "core/peticionesAjax.php",
+				data: { peticion: 'getOficinasJefe' }
+			};
+			var ajax = new Ajax(ajaxConfig);
+			ajax.initRequest().then((result) => {
+				var data = JSON.parse(result); 
+				data.forEach((oficina) => {
+					selectorOficina.add({
+						value: oficina.value,
+						text: oficina.name
+					});
+				});
+			}).catch((error) => {
+				console.log(error);
+				selectorOficina.disable();
+			});
+		}
+		/**
+		 * Handler for selectOficina
+		 */
+		function selectOficinaHandler() {
+			if(selectorOficina !== null) {
+				selectorOficina.disable();
+				labelSelectOficina.classList.add('label-disabled');
+
+				// Activa o desactiva el select oficina-jefe
+				checkbox.addEventListener('change', function(event) {
+					var parentContainer = selectOficina.parentElement;
+					var selectContainer = parentContainer.querySelector('.selectr-selected');
+					if(event.target.checked) {
+						selectorOficina.enable();
+						llenarSelectOficina();
+						selectOficina.setAttribute('required','');
+						labelSelectOficina.classList.remove('label-disabled');
+
+						selectContainer.classList.add('selectr-invalid');
+					} else {
+						selectorOficina.removeAll();
+						selectorOficina.disable();
+						labelSelectOficina.classList.add('label-disabled');
+						selectOficina.removeAttribute('required');
+
+						selectContainer.classList.remove('selectr-invalid');
+					}
+				}, false);
+			}
 		}
 		return {
-			selectBoxes: function() {
-				selectrPluginStyle();
+			selectHandler: function() {
+				selectOficinaHandler();
 			}
 		}
 	}

@@ -6,15 +6,14 @@
 a {
 	text-decoration: none;
 }
-body { 
-	overflow: hidden; 
-}
 main {
 	display: flex;
 	flex-direction: column;
 }
 /** Section (navbar) */
 header.mynavbar {
+	position: fixed;
+	z-index: 12000;
 	display: flex;
 	align-items: center;
 	height: 40px;
@@ -36,7 +35,7 @@ header h3.nv-title {
 	margin: 0;
 	text-align: center;
 	font-family: "Roboto bold", Arial, Helvetica, Verdana;
-	font-size: 30px;
+	font-size: 1.5rem;
 	font-weight: bold;
 	color: white;
 }
@@ -52,7 +51,7 @@ nav#sidebar-menu {
 	box-shadow: 0 0 1px 1px #3a4961;
 	user-select: none;
 	font-family: "Roboto bold",Arial,Helvetica,Verdana;
-	font-size: 14px;
+	font-size: 0.87rem;
 	transition: transform .2s ease-out;
 }
 nav div.menu-title {
@@ -63,7 +62,7 @@ nav div.menu-title {
 	margin: 10px auto;
 	padding: 0 8px;
 	border-radius: 5px;
-	font-size: 15px;
+	font-size: 1rem;
 	text-align: center;
 }
 div.menu-title span {
@@ -73,7 +72,7 @@ div.menu-title span {
 div.menu-title i {
 	flex: 0 1 6%;
 	cursor: pointer;
-	font-size: 25px;	/*size-icon*/
+	font-size: 1.56rem;	/*size-close-icon*/
 }
 /** user-info(ui) */
 nav div.user-info figure {
@@ -88,7 +87,7 @@ div.ui div.menu-setting-options {
 	line-height: 50px;
 	border-bottom: 1px solid rgba(255, 255, 255, .3);
 	border-top: 1px solid rgba(255, 255, 255, .3);
-	font-size: 20px;	/*size icons*/
+	font-size: 1.25rem;	/*size icons*/
 	text-align: center;
 }
 div.ui div.menu-setting-options i {
@@ -114,7 +113,7 @@ a.menu-item i.i1 {
 	flex: 0 2 20%;
 	text-align: right;
 	padding-right: 10px;
-	font-size: 16px;
+	font-size: 1rem;
 }
 a.menu-item span {
 	flex: 1 1 60%;
@@ -143,38 +142,48 @@ a.submenu-item i {
 	flex: 0 1 28%;
 	text-align: right;
 	padding-right: 10px;
-	font-size: 9px;
+	font-size: 0.56rem;
 }
 a.submenu-item span { flex: 1 1 72%; }
 
 /** Section (contenido) */
 section.contenido {
 	background: #f7f7f7;
-	overflow: auto;
-	height: 93vh !important;
-	padding: 15px;
+	height: 100vh !important;
+	padding-top: 40px;
 	font-family: "Roboto", Arial, Helvetica, Verdana !important;
 }
-
+.contenido > h1 {
+	border: 1px solid red;
+	text-align: center;
+	margin: 0;
+}
 /** Formulario Style */
 form {
-	font-size: 15px;
+	font-size: 0.93rem;
+	padding-bottom: 10px; 
 }
 div.box {
 	background: white;
+	border: 1px solid #d0cece;
 	border-radius: 5px;
-	box-shadow: 2px 2px 1px 0px #f5f5f5;
+	box-shadow: 2px 2px 5px 0px #d0cece;
 	padding: 20px;
 }
-div.box:first-child {
-	margin-right: 15px;
+div.box:nth-child(1) {
+	margin: 10px 8px 10px 8px;		/* top-right-bottom-left */
+}
+div.box:nth-child(2) {
+	margin: 10px 8px 10px 0;	/* top-right-bottom-left */
 }
 div.box div.field {
 	margin-bottom: 8px;
-	/*border: 1px solid red;*/
 }
 label:not(.gender) {
 	margin-bottom: 2px;
+}
+label.label-disabled {
+	color: #c3c3c3;
 }
 div.box > div.titulo {
 	font-family: "Roboto bold";
@@ -185,7 +194,7 @@ button {
 	font-size: inherit !important;
 }
 button i {
-	font-size: 17px !important;	
+	font-size: 1.06rem !important;	
 }
 div.btn-group {
 	display: block;
@@ -197,18 +206,18 @@ div.btn-group {
 	text-align: center;
 }
 #form-trabajador .multiple-input {	/* en una fila */
-	min-width: 180px !important;
-	max-width: 210px !important;
-}
-#form-trabajador select {
-	width: 100%;
-	height: 30px !important;
+	min-width: 180px;
+	max-width: 210px;
 }
 #form-trabajador #telefono {
-	width: 50%;
+	/*width: 50%;*/
+}
+/* Formulario OFICINA */
+#form-oficina {
+	width: 80%;
 }
 
-/* selectr plugin config */
+/* selectr-mobius plugin config style */
 .selectr-selected {
 	min-height: calc(1.5em + .5rem + 2px);
     padding: .25rem .5rem;
@@ -226,25 +235,29 @@ div.btn-group {
 	box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25);
 	z-index: 11000;
 }
-.selectr-selected.selectr-valid {
+.was-validated .selectr-selected.selectr-valid {
 	border: 1px solid #28a745;
 }
-.selectr-container.open.inverted .selectr-selected.selectr-valid:focus,
-.selectr-selected.selectr-valid:focus {
+.was-validated .selectr-container.open.inverted .selectr-selected.selectr-valid:focus,
+.was-validated .selectr-selected.selectr-valid:focus {
 	border: 1px solid #28a745;
 	box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
 }
-.selectr-selected.selectr-invalid {
+.was-validated .selectr-selected.selectr-invalid {
 	border: 1px solid #dc3545;
 }
-.selectr-container.open.inverted .selectr-selected.selectr-invalid:focus,
-.selectr-selected.selectr-invalid:focus {
+.was-validated .selectr-container.open.inverted .selectr-selected.selectr-invalid:focus,
+.was-validated .selectr-selected.selectr-invalid:focus {
 	border: 1px solid #dc3545;
 	box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
 }
-
+.selectr-container.selectr-disabled .selectr-selected {
+	border: 1px solid #ced4da;
+	box-shadow: 0 0 0 0 #fff;
+	opacity: 0.6;
+}
 /** RESPONSIVE 
-* pantalla-super-pequeña */
+* .my-xsm (Extra small) */
 @media screen and (max-width: 400px) {
 	nav#sidebar-menu {
 		width: 100vw;
@@ -257,9 +270,25 @@ div.btn-group {
 	.mynavbar h3 { order: 1; }
 	.mynavbar i.btn-menu { order: 3; }
 }
-/* small-device (sm) */
-@media screen and (max-width: 576px) {	
-	section.contenido {
-		padding: 10px;
+/* v5.container-md (MEDIUM) */
+@media screen and (max-width: 768px) {
+	div.box:nth-child(1) {
+		margin: 10px 0 10px 0;	/*top-right-bottom-left*/
+	}
+	div.box:nth-child(2) {
+		margin: 0 0 10px 0;		/*top-right-bottom-left*/
+	}
+	#form-oficina {
+		width: 90%;
+	}
+}
+/* v5.container-sm (SMALL) */	
+@media screen and (max-width: 576px) {
+	div.box {
+		padding: 15px;
+	}
+	#form-oficina {
+		width: 100%;
+		padding: 0;
 	}
 }

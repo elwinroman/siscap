@@ -1,4 +1,6 @@
 <?php 
+require_once 'core/ControladorBase.php';
+require_once 'core/ModelBase.php';
 require 'autoload.php';
 require 'views/layout/header.php';
 require 'views/layout/sidebar.php';

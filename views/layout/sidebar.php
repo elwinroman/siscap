@@ -3,7 +3,7 @@
 	<h3 class="nv-title">Sistema cap</h3>
 </header>
 
-<nav id="sidebar-menu" class="dark-style">
+<nav id="sidebar-menu" class="light-style">
 	<div class="menu-title">
 		<span>TITULO MENU</span>
 		<i class="zmdi zmdi-close"></i>

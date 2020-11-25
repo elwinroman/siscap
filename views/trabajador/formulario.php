@@ -2,7 +2,7 @@
 <form id="form-trabajador" action="" class="container-fluid needs-validation" novalidate autocomplete="off">
 	<!-- //////////// DATOS PERSONALES ////////////////// -->
 	<div class="row">
-		<div class="col-sm box">
+		<div class="col-md box">
 			<div class="titulo">Datos personales</div>
 			<div class="field">		<!-- Field NOMBRES -->
 				<label for="nombre">Nombres</label>
@@ -36,7 +36,7 @@
 				</div>
 				<div class="col-6 col-md-4 field multiple-input">	<!-- Field PROVINCIA -->
 					<label for="provincia">Provincia</label><br>
-					<select id="myselecttt" class="mySelectr lugar-nacimiento" name="provincia" required>
+					<select class="mySelectr lugar-nacimiento" name="provincia" required>
 						
 	  				</select>
 				</div>
@@ -70,13 +70,13 @@
 				<label for="email">Correo electrónico</label>
 				<input class="form-control form-control-sm" type="email" name="email" required>
 			</div>
-			<div id="telefono" class="field">	<!-- Field TELEFONO -->
+			<div id="telefono" class="field multiple-input">	<!-- Field TELEFONO -->
 				<label for="telefono">Teléfono o celular</label>
 				<input type="text" class="form-control form-control-sm" name="telefono" pattern="\s*[0-9]\s*" maxlenght="9">
 			</div>
 		</div>
 
-		<div class="col-sm box">
+		<div class="col-md box">
 			<div class="titulo">Datos académicos</div>
 			<div class="field">		<!-- Campo (profesion) -->
 				<label for="profesion">Profesión</label>
