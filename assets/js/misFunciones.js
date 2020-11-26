@@ -84,13 +84,22 @@ var Plugin = {
 	}
 }
 ////////////////////////////////////////////////////////////////////////////
-function Ajax(configSended) {
+function Ajax(newConfig) {
 	var xhttp = new XMLHttpRequest();
 	var config = {
-		method	: configSended.method,
-		url 	: configSended.url,
-		data 	: Object.assign({}, configSended.data)
+		method	: "GET",	// optional
+		url 	: '',		// required
+		data 	: ''		// optional
 	};
+	(function construct() {
+		if(newConfig.method)
+			config.method = newConfig.method,
+		config.url = newConfig.url;
+		if(newConfig.data) {
+			config.data = serializeData(newConfig.data);
+		}
+	})();
+	console.log("config.data = " + config.data);
 	/**
 	 * Asigna el contenido devuelto de la petición en variables del Objeto Promise 
 	 */
@@ -122,29 +131,29 @@ function Ajax(configSended) {
 	 * Ejemplo: "nombre=elwin&apellido=roman&edad=23" etc.
 	 * @return{string} dataSerialized
 	 */
-	function serializeData() {
+	function serializeData(dataObject) {
 		var dataSerialized = '';
 		var count = 0;
-		for(var prop in config.data) {
+		for(var prop in dataObject) {
 			count++;
-			dataSerialized += (prop+'='+config.data[prop]);
-			if(count < getObjectLength(config.data))
+			dataSerialized += (prop+'='+dataObject[prop]);
+			if(count < getObjectLength(dataObject))
 				dataSerialized += '&';
 		}
 		return dataSerialized;
 	}
-	/*function xhttpOpen() {
-		if(typeof(config.data) === "string")
-				xhttp.open(config.method, config.url+'?data='+config.data, true);
-		else if(typeof(config.data) === "object")
-			xhttp.open(config.method, config.url+'?'+serializeData(config.data), true);
-	}*/
 	return {
 		initRequest: function() {
 			return new Promise((resolve, reject) => {
 				xhttp.onreadystatechange = () => { checkRequest(resolve, reject); };
-				xhttp.open(config.method, config.url+'?'+serializeData(config.data), true);
-				xhttp.send();
+				if(config.method === "GET") {
+					xhttp.open(config.method, config.url + "?" + config.data, true);
+					xhttp.send();
+				} else if(config.method === "POST") {
+					xhttp.open(config.method, config.url, true);
+					xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+					xhttp.send(config.data);
+				}
 			});
 		}
 	}

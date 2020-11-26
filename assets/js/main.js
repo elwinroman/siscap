@@ -348,6 +348,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		var selectOficina = document.getElementById('sct-oficina-jefe');
 		var selectorOficina = Plugin.selectr(selectOficina);
 
+		var tableOficina = document.getElementById('dt-oficina');
+		var datatableOficina;
 		/**
 		 * Llena con datos select-oficina
 		 */
@@ -355,10 +357,9 @@ document.addEventListener('DOMContentLoaded', function() {
 			var ajaxConfig = {
 				method: "POST",
 				url: "core/peticionesAjax.php",
-				data: { peticion: 'getOficinasJefe' }
+				data: { peticion: "getOficinasJefe" }
 			};
-			var ajax = new Ajax(ajaxConfig);
-			ajax.initRequest().then((result) => {
+			Ajax(ajaxConfig).initRequest().then((result) => {
 				var data = JSON.parse(result); 
 				data.forEach((oficina) => {
 					selectorOficina.add({
@@ -400,6 +401,17 @@ document.addEventListener('DOMContentLoaded', function() {
 					}
 				}, false);
 			}
+		}
+		/**
+		 * Handler para listar oficinas con vanilla-datatables
+		 */
+		function datatableHandler() {
+			// Getting data
+			var myData = 
+
+			datatableOficina = new DataTable(tableOficina, {
+				data: myData
+			});
 		}
 		return {
 			selectHandler: function() {
