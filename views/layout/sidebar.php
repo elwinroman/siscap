@@ -3,7 +3,7 @@
 	<h3 class="nv-title">Sistema cap</h3>
 </header>
 
-<nav id="sidebar-menu" class="light-style">
+<nav id="sidebar-menu" class="dark-style active">
 	<div class="menu-title">
 		<span>TITULO MENU</span>
 		<i class="zmdi zmdi-close"></i>
@@ -26,7 +26,6 @@
 			<a class="menu-item" href="#principal" data-menu-item-id="1">
 				<i class="i1 zmdi zmdi-view-dashboard"></i>
 				<span>Principal</span>
-				<!-- <i class="i2 zmdi"></i> -->
 			</a>
 		</div>
 
@@ -57,11 +56,11 @@
 				<i class="i2 zmdi zmdi-chevron-down"></i>
 			</a>
 			<div class="submenu-box">
-				<a class="submenu-item" data-submenu-item-id="1" href="#">
+				<a class="submenu-item" data-submenu-item-id="1" href="?controller=Cargo&action=listar">
 					<i class="zmdi zmdi-circle"></i>
 					<span>Inicio</span>
 				</a>
-				<a class="submenu-item" data-submenu-item-id="2" href="?controller=Cargo&action=formularioCargo">
+				<a class="submenu-item" data-submenu-item-id="2" href="?controller=Cargo&action=mostrarFormulario">
 					<i class="zmdi zmdi-circle"></i>
 					<span>Crear cargo</span>
 				</a>
@@ -76,11 +75,11 @@
 				<i class="i2 zmdi zmdi-chevron-down"></i>
 			</a>
 			<div class="submenu-box">
-				<a class="submenu-item" data-submenu-item-id="1" href="#">
+				<a class="submenu-item" data-submenu-item-id="1" href="?controller=Oficina&action=listar">
 					<i class="zmdi zmdi-circle"></i>
 					<span>Inicio</span>
 				</a>
-				<a class="submenu-item" data-submenu-item-id="2" href="?controller=Oficina&action=formularioOficina">
+				<a class="submenu-item" data-submenu-item-id="2" href="?controller=Oficina&action=mostrarFormulario">
 					<i class="zmdi zmdi-circle"></i>
 					<span>Crear oficina</span>
 				</a>

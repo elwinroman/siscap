@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="UTF-8">
@@ -10,11 +10,11 @@
 	<link rel="stylesheet" href="assets/resources/bootstrap-5.0.0-alpha2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="assets/resources/selectr-2.4.13/css/selectr.min.css">
 	<link rel="stylesheet" href="assets/resources/vanilla-datatables-1.6.16/vanilla-dataTables.min.css">
-	<link rel="stylesheet" href="assets/css/main.css">
 	<link rel="stylesheet" href="assets/css/misEstilos.css">
+	<link rel="stylesheet" href="assets/css/main.css">
 
 	<script src="assets/resources/selectr-2.4.13/js/selectr.min.js"></script>
-	<script src="assets/resources/vanilla-datatables-1.6.16/vanilla-dataTables.min.js"></script>
+	<script src="assets/resources/vanilla-datatables-1.6.16/vanilla-dataTables.js"></script>
 	<script src="assets/js/misFunciones.js"></script>
 	<script src="assets/js/main.js"></script>
 </head>

@@ -25,8 +25,8 @@ const DEPARTAMENTO_PUNO = {
 var Animation = {
 	/**
      * Efecto SlideUp
-     * @param {HTMLElement} element 	=> Nodo o elemento HTML
-     * @param {Number} duration 		=> Duración del efecto en milisegundos
+     * @param {DOMElement} element
+     * @param {Number} duration
      */
 	slideUp: function(element, duration = 400) {
 		if(document.body.contains(element)) {
@@ -42,8 +42,8 @@ var Animation = {
 	},
     /**
      * Efecto SlideDown
-     * @param {HTMLElement} elemento 	=> Nodo o elemento HTML
-     * @param {Number} duration 		=> Duración del efecto en milisegundos
+     * @param {DOMElement} elemento
+     * @param {Number} duration
      */
 	slideDown: function(element, duration = 400) {
 		if(document.body.contains(element)) {
@@ -61,9 +61,9 @@ var Animation = {
 /////////////////////////////////////////////////////////////////////
 var Plugin = {
 	/**
-	 * Crea un nuevo selector de la clase Selectr
-	 * @param{HTMLElement} element
-	 * @return[newSelectrObject]
+	 * Crea un nuevo selector del plugin 'selectr'
+	 * @param {DOMElement} element
+	 * @return {Object Selectr | null} newSelectr
 	 */
 	selectr: function(element) {
 		if(document.body.contains(element)) {
@@ -79,8 +79,38 @@ var Plugin = {
 		}
 		return null;
 	},
-	datatables: function() {
-		//code here
+
+	/**
+	 * Crea un nuevo datatable del plugin 'Vanilla-dataTable'
+	 * @param {DOMElement} element
+	 * @param {Array Objects} data
+	 * @return {Object dataTable} newDatatable
+	 */
+	datatable: function(element, data) {
+		if(document.body.contains(element)) {
+			var headingArray = Object.keys(data[0]);
+			var lastHeading = headingArray.length-1;
+
+			var newDatatable = new DataTable(element, {
+				labels: {
+					placeholder: "Buscar...",
+					perPage: "Mostrar {select} registros",
+					noRows: "No hay datos para mostrar",
+					info: "Mostrando registros del {start} al {end} de un total de {rows} registros"
+				},
+				data: { 
+					"headings": headingArray,
+					"data": helper_function.arrayDataParse(data)
+				},
+				perPageSelect: [10, 25, 50, 100],
+				columns: [
+					{ select: lastHeading, sortable: false }
+				]
+			});
+
+			return newDatatable;
+		}
+		return null;
 	}
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -91,56 +121,29 @@ function Ajax(newConfig) {
 		url 	: '',		// required
 		data 	: ''		// optional
 	};
+	// Constructor
 	(function construct() {
 		if(newConfig.method)
 			config.method = newConfig.method,
 		config.url = newConfig.url;
 		if(newConfig.data) {
-			config.data = serializeData(newConfig.data);
+			config.data = helper_function.serializeData(newConfig.data);
 		}
 	})();
-	console.log("config.data = " + config.data);
-	/**
-	 * Asigna el contenido devuelto de la petición en variables del Objeto Promise 
-	 */
+	// Asigna el contenido devuelto de la petición en variables del Objeto Promise
 	function checkRequest(resolve, reject) {
 		if(xhttp.readyState == 4) {
 		    if(xhttp.status == 200) {
-		    	if(xhttp.responseText !== "error")
-		    		resolve(xhttp.responseText);
-		    	else
+		    	if(xhttp.responseText === "error")
 		    		reject("a query error has ocurred");
+		    	else if(xhttp.responseText === "empty")
+		    		reject("no hay datos disponibles");
+		    	else
+		    		resolve(xhttp.responseText);
 		    }
 		    else
 		    	reject(xhttp.statusText);
 		}
-	}
-	/**
-	 * Obtiene el número de propiedades de un objeto
-	 * @param{Object} object
-	 * @return[Integer] length
-	 */
-	function getObjectLength(object) {
-		var length = 0;
-		for(var prop in object)
-			length++;
-		return length;
-	}
-	/**
-	 * Serializa un Objeto de datos para enviarlos a un servidor (PHP)
-	 * Ejemplo: "nombre=elwin&apellido=roman&edad=23" etc.
-	 * @return{string} dataSerialized
-	 */
-	function serializeData(dataObject) {
-		var dataSerialized = '';
-		var count = 0;
-		for(var prop in dataObject) {
-			count++;
-			dataSerialized += (prop+'='+dataObject[prop]);
-			if(count < getObjectLength(dataObject))
-				dataSerialized += '&';
-		}
-		return dataSerialized;
 	}
 	return {
 		initRequest: function() {
@@ -158,3 +161,83 @@ function Ajax(newConfig) {
 		}
 	}
 }
+// Funciones de ayuda
+var helper_function = {
+	/**
+	 * Neutralizador de acentos exceptuando (ñÑ accents) [para cualquier lenguaje]
+	 * @param {String} data
+	 * @return {String} data
+	 */
+	removeAccents: function(data) {
+		if(data.normalize) {
+	        return data
+	        	.normalize('NFD')
+	        	.replace(/([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+/gi, '$1').
+	        	normalize();
+	    	}
+    	return data;
+	},
+	/**
+	 * Serializa un Objeto de datos para enviarlos a un servidor (PHP)
+	 * Ejemplo: "data1=value1&data2=value2&data3=value3" etc.
+	 * @param {Object} dataObject
+	 * @return {string} dataSerialized
+	 */
+	serializeData: function(dataObject) {
+		var dataSerialized = '';
+		var count = 0;
+		for(var prop in dataObject) {
+			count++;
+			dataSerialized += (prop+'='+dataObject[prop]);
+			if(count < helper_function.getObjectLength(dataObject))
+				dataSerialized += '&';
+		}
+		return dataSerialized;
+	},
+	/**
+	 * Convierte un array de objetos a un array de arrays para el tbody-datatable
+	 * @param {Object} data
+	 * @return {Array} newData
+	 */
+	arrayDataParse: function(data) {
+		var newData = [];
+		for(var i=0; i<data.length; i++) {
+		    newData[i] = [];
+		    for (var p in data[i]) {
+		        if(data[i].hasOwnProperty(p))
+		            newData[i].push(data[i][p]);
+		    }
+		}
+		return newData;
+	},
+	/**
+	 * Obtiene el número de propiedades de un objeto
+	 * @param {Object} object
+	 * @return {Integer} length
+	 */
+	getObjectLength: function(object) {
+		var length = 0;
+		for(var prop in object)
+			length++;
+		return length;
+	},
+	/** 
+	 * Remueve nombres de clases a una lista de elementos 
+	 * @param{HTMLCollection} elementList 	=> Lista de nodos
+	 * @param{string} nameClass 			=> Nombre de clase
+	 */
+	myRemoveClass: function(elementList, nameClass) {
+		for(var element of elementList)
+			element.classList.remove(nameClass);
+	},
+	/** 
+	 * Añade nombres de clases a una lista de elementos 
+	 * @param {HTMLCollection} elementList => Lista de nodos
+	 * @param {string} nameClass		   => Nombre de clase
+	 */
+	myAddClass: function(elementList, nameClass) {
+		for(var element of elementList)
+			element.classList.add(nameClass);
+	}
+}
+

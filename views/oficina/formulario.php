@@ -1,5 +1,5 @@
-<h1>FORMULARIO PARA CREAR OFICINA</h1>
-<form id="form-oficina" class="container-fluid needs-validation" novalidate autocomplete="off" action="?controller=Oficina&action=crearOficina" method="POST">
+<h1>CREAR OFICINA</h1>
+<form id="form-oficina" class="container-fluid needs-validation" novalidate autocomplete="off" action="?controller=Oficina&action=crear" method="POST">
 	<div class="col-sm box">
 		<div class="field">		<!-- Field NOMBRE -->
 			<label for="nombre">Nombre</label>
@@ -14,8 +14,9 @@
 		</div>
 
 		<div class="field">		<!-- Field OFICINA-JEFE -->
-			<label for="oficina">Oficina jefe</label><br>
-			<select id="sct-oficina-jefe" class="mySelectr" name="oficina">
+			<label for="oficina-jefe">Oficina jefe</label><br>
+			<select class="mySelectr" name="oficina-jefe">
+				<!-- Selectr -->
 			</select>
 		</div>
 	</div>
@@ -31,3 +32,9 @@
 		</button>
 	</div>
 </form>
+
+<?php if(isset($_SESSION['oficina']['crearOficina'])): ?>
+	<div id="alerta-crear-oficina" style="display: none">
+		<?=$_SESSION['oficina']['crearOficina'];?>		
+	</div>
+<?php endif; ?>

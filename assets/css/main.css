@@ -6,18 +6,28 @@
 a {
 	text-decoration: none;
 }
+button {
+	font-size: inherit !important;
+}
+button i {
+	font-size: 1.06rem !important;	
+}
+body {
+	overflow: auto;
+}
 main {
 	display: flex;
 	flex-direction: column;
 }
-/** Section (navbar) */
+/*///////////////////////////*/
+/* Section (navbar) */
 header.mynavbar {
 	position: fixed;
 	z-index: 12000;
 	display: flex;
 	align-items: center;
 	height: 40px;
-	width: 100vw;
+	width: 100%;
 	background-color: black;
 	padding: 0 5px;
 }
@@ -34,13 +44,12 @@ header h3.nv-title {
 	flex: 0 1 98%;
 	margin: 0;
 	text-align: center;
-	font-family: "Roboto bold", Arial, Helvetica, Verdana;
-	font-size: 1.5rem;
+	/*font-family: "Roboto bold", Arial, Helvetica, Verdana;*/
+	font-size: 1.3rem;
 	font-weight: bold;
 	color: white;
 }
-
-/** Section (menu-sidebar) */
+/* Section (menu-sidebar) */
 nav#sidebar-menu {
 	z-index: 12000;
 	position: fixed;
@@ -74,7 +83,7 @@ div.menu-title i {
 	cursor: pointer;
 	font-size: 1.56rem;	/*size-close-icon*/
 }
-/** user-info(ui) */
+/* user-info(ui) */
 nav div.user-info figure {
 	padding: 10px;
 	text-align: center;
@@ -94,7 +103,7 @@ div.ui div.menu-setting-options i {
 	cursor: pointer;
 	padding: 0 20px;
 }
-/** menu-box */
+/* menu-box */
 nav div.full-menu { padding-top: 10px; }
 nav div.menu-box {
 	display: flex;
@@ -123,7 +132,7 @@ a.menu-item i.i2 {
 	flex: 0 2 20%;
 	text-align: center;
 }		
-/** submenu-box */
+/* submenu-box */
 nav div.menu-box div.submenu-box {
 	height: 0;
 	transition-property: height;
@@ -146,40 +155,44 @@ a.submenu-item i {
 }
 a.submenu-item span { flex: 1 1 72%; }
 
-/** Section (contenido) */
+/*/////////////////////////////////*/
+/* Section (contenido) */
 section.contenido {
 	background: #f7f7f7;
-	height: 100vh !important;
+	height: 100%;
+	min-height: 88vh;
 	padding-top: 40px;
 	font-family: "Roboto", Arial, Helvetica, Verdana !important;
 }
 .contenido > h1 {
+	line-height: 50px;
+	margin: 10px 0 0 0;
 	border: 1px solid red;
 	text-align: center;
-	margin: 0;
+	font-family: "roboto bold";
+	/*color: white;*/
 }
-/** Formulario Style */
+/* Formularios */
 form {
 	font-size: 0.93rem;
 	padding-bottom: 10px; 
 }
 div.box {
 	background: white;
-	border: 1px solid #d0cece;
-	border-radius: 5px;
-	box-shadow: 2px 2px 5px 0px #d0cece;
+	border: 1px solid #d9d9d9;
+	box-shadow: 2px 2px 5px 0px #d9d9d9;
 	padding: 20px;
 }
 div.box:nth-child(1) {
-	margin: 10px 8px 10px 8px;		/* top-right-bottom-left */
+	margin: 2px 8px 10px 8px;		/* top-right-bottom-left */
 }
 div.box:nth-child(2) {
-	margin: 10px 8px 10px 0;	/* top-right-bottom-left */
+	margin: 2px 8px 10px 0;	/* top-right-bottom-left */
 }
 div.box div.field {
 	margin-bottom: 8px;
 }
-label:not(.gender) {
+label:not(.gender) {	/* !!cambiar el nombre de la clase */
 	margin-bottom: 2px;
 }
 label.label-disabled {
@@ -189,19 +202,11 @@ div.box > div.titulo {
 	font-family: "Roboto bold";
 	color: darkblue;
 }
-/*test code*/
-button {
-	font-size: inherit !important;
-}
-button i {
-	font-size: 1.06rem !important;	
-}
 div.btn-group {
 	display: block;
 	text-align: center;
 }
-/*end of test code*/
-/** Formulario-TRABAJADOR */
+/* Formulario-TRABAJADOR */
 #form-trabajador h1 {
 	text-align: center;
 }
@@ -209,14 +214,71 @@ div.btn-group {
 	min-width: 180px;
 	max-width: 210px;
 }
-#form-trabajador #telefono {
-	/*width: 50%;*/
-}
 /* Formulario OFICINA */
 #form-oficina {
 	width: 80%;
 }
+/* Datatable OFICINA */
+div#lista-oficina,
+div#lista-cargo {
+	font-size: 0.93rem;
+}
+#dt-cargo > thead > tr > th:nth-child(2),
+#dt-cargo > thead > tr > th:nth-child(3) {
+	width: 20%;
+}
 
+/*///////////////////////////////////*/
+/* Datatables plugin */
+div.dataTable-wrapper {
+	background: white;
+	border: 1px solid #d9d9d9;
+	box-shadow: 2px 2px 5px 0px #d9d9d9;
+	padding: 5px 0;
+}
+.dataTable-wrapper .dataTable-selector,
+.dataTable-wrapper .dataTable-input {
+    padding: .25rem .5rem;
+	border: 1px solid #ced4da;
+	border-radius: .2rem;
+	font-size: .875rem;
+	color: #495057;
+}
+thead {
+	background: #F4F5F9;
+}
+.dataTable-sorter::after,
+.dataTable-sorter::before {
+	opacity: 0;
+}
+.dataTable-table > thead > tr > th {
+	vertical-align: middle;
+}
+.dataTable-table > tbody > tr > td {
+	vertical-align: middle;
+	padding: 8px 15px;
+}
+.dataTable-table > thead > tr > th.special-column,
+.dataTable-table > tbody > tr > td.special-column {
+	width: 5% !important;
+	padding: 0;
+	text-align: center;
+}
+.dataTable-table > tbody > tr:hover {
+	background: #f6ffa7;
+}
+.dataTable-table i.icon-datatable-link {
+	pointer-events: auto !important;
+	font-size: 1.3rem;
+	padding: 4px 6px;
+	border-radius: 100%;
+	vertical-align: middle;
+}
+.dataTable-table i.icon-datatable-link:hover {
+	cursor: pointer;
+	background: #B0A7FF;
+}
+/*//////////////////////////////////////*/
 /* selectr-mobius plugin config style */
 .selectr-selected {
 	min-height: calc(1.5em + .5rem + 2px);
@@ -234,6 +296,9 @@ div.btn-group {
 	outline: 0;
 	box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25);
 	z-index: 11000;
+}
+.selectr-container .selectr-options {
+	font-size: .9rem;
 }
 .was-validated .selectr-selected.selectr-valid {
 	border: 1px solid #28a745;
@@ -267,8 +332,8 @@ div.btn-group {
 	a.menu-item { line-height: 40px !important; }
 	
 	/* order navbar items */
-	.mynavbar h3 { order: 1; }
-	.mynavbar i.btn-menu { order: 3; }
+	.mynavbar h3 { order: 1 !important; }
+	.mynavbar i.btn-menu { order: 2 !important; }
 }
 /* v5.container-md (MEDIUM) */
 @media screen and (max-width: 768px) {
@@ -291,4 +356,47 @@ div.btn-group {
 		width: 100%;
 		padding: 0;
 	}
+	div#lista-oficina,
+	div#lista-cargo {
+		padding: 0;
+	}
+	/*//////////////////////////////*/
+	/* Datatable plugin */
+	.dataTable-top .dataTable-search,
+	.dataTable-top .dataTable-dropdown {
+		display: block;
+		width: 100%;
+		text-align: center;
+	}
+}
+/*GUARDAR POSIBLES USOS - FOOTER*/
+footer {
+	height: 72px;
+	width: 100%;
+	background-color: #444;
+	box-shadow: 0 1px 7px 0 rgba(0,0,0,0.12), 0 2px 5px 0 rgba(0,0,0,0.1);
+	text-align: center;
+	color: #ffffffbf;
+	padding: 25px 0;
+}
+#modal-main {
+	display: none;
+	top: 0%;
+	position: fixed;
+	z-index: 11000;
+	height: 100vh;
+	width: 100vw;
+	background-color: rgba(0,0,0,.2);
+	transition: all .2s ease-in-out;
+}
+#modal-main.on {
+	display: block;
+}
+.my-card {
+	/*max-width: 400px;*/
+	max-width: 130px;
+	border-radius: 4px;
+	border: 1px solid rgba(0, 0, 0, 0.025);
+	font-family: "Roboto bold";
+	font-size: 0.75rem;
 }

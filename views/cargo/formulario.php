@@ -1,5 +1,5 @@
 <h1>FORMULARIO PARA CREAR CARGO</h1>
-<form id="form-cargo" action="" class="container-fluid needs-validation" novalidate autocomplete="off">
+<form id="form-cargo" class="container-fluid needs-validation" novalidate autocomplete="off" action="?controller=Cargo&action=crear" method="POST">
 	<div class="row">
 		<div class="col-md box">
 			<div class="titulo">Información del cargo</div>
@@ -24,50 +24,53 @@
 				</div>
 			</div>
 			<div class="row align-items-end">
-			<div class="col field">	 <!-- Field CARGO DE CONFIANZA -->
-				<label class="d-block" for="cargo-confianza">¿Cargo de confianza?</label>
-				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="cargo-confianza" value="si" required>
-					<label class="form-check-label">Si</label>
-				</div>	
-				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="cargo-confianza" value="no" required>
-					<label class="form-check-label">No</label>
+				<div class="col field">	 <!-- Field CARGO DE CONFIANZA -->
+					<label class="d-block" for="cargo-confianza">¿Cargo de confianza?</label>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="cargo-confianza" value="si" required>
+						<label class="form-check-label">Si</label>
+					</div>	
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="cargo-confianza" value="no" required>
+						<label class="form-check-label">No</label>
+					</div>
+				</div>
+				<div class="col field">	 <!-- Field CARGO JEFE -->
+					<label class="d-block" for="cargo-jefe">¿Cargo jefe?</label>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="cargo-jefe" value="si" required>
+						<label class="form-check-label">Si</label>
+					</div>	
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="cargo-jefe" value="no" required>
+						<label class="form-check-label">No</label>
+					</div>
 				</div>
 			</div>
-			<div class="col field">	 <!-- Field CARGO JEFE -->
-				<label class="d-block" for="cargo-jefe">¿Cargo jefe?</label>
-				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="cargo-jefe" value="si" required>
-					<label class="form-check-label">Si</label>
-				</div>	
-				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="cargo-jefe" value="no" required>
-					<label class="form-check-label">No</label>
-				</div>
-			</div>
-			</div>
+
 		</div>
 		<div class="col-md box">
 			<div class="titulo">Asignar oficina</div>
+
 			<div class="field">		<!-- Field OFICINA -->
 				<label for="oficina">Oficina</label><br>
-				<select class="mySelectr asignar-oficina" name="oficina" required>
-					<option value="1">Gerencia 1</option>
-					<option value="2">Gerencia 2</option>
-					<option value="2">Gerencia 3</option>
-					<option value="2">Gerencia 4</option>
+				<select class="mySelectr" name="oficina-jefe" required>
+					<!-- Selectr -->
   				</select> 
 			</div>
-			<div class="field">		<!-- Field OFICINA -->
+			
+			<div class="form-check field">
+				<input type="checkbox" class="form-check-input" name="check" value="active">
+				<label for="check">Habilitar Suboficinas</label>
+			</div>
+			
+			<div class="field">		<!-- Field SUBOFICINA -->
 				<label for="suboficina">Suboficina</label><br>
-				<select class="mySelectr asignar-oficina" name="suboficina" required>
-					<option value="1">Subgerencia 1</option>
-					<option value="2">Subgerencia 2</option>
-					<option value="2">Subgerencia 3</option>
-					<option value="2">Subgerencia 4</option>
+				<select class="mySelectr" name="suboficina">
+					<!-- Selectr -->
   				</select>
 			</div>
+
 		</div>
 	</div>
 

@@ -2,17 +2,21 @@
 class ModelBase {
 	private $database;	// Object DATABASE
 	private $db;		// Base de datos conectada
+	private $table;
 
 	protected function __construct() {
 		require 'config/bd.php';
 		$this->database = new Database();
 		$this->db = $this->database->conectar();
 	}
+	protected function reconectar() {
+		$this->db = $this->database->conectar();	
+	}
 	/**
 	 * Consulta query segura
-	 * @param{String} $sql => Consulta SQL preparada
-	 * @param{Array} $data => Datos de consulta
-	 * @param{String} $bind => 
+	 * @param {String} $sql => Consulta SQL preparada
+	 * @param {Array} $data => Datos de consulta
+	 * @param {String} $bind => 
 	 */
 	protected function queryPrepared($query, array $args) {
 		$stmt   = $this->prepare($query);
@@ -37,14 +41,14 @@ class ModelBase {
 	}
 	/**
 	 * Consulta query normal
-	 * @param{String} $sql => Consulta SQL
-	 * @return{Object mysqli_result} $query
+	 * @param {String} $sql
+	 * @return {Object mysqli_result} $query
 	 */
 	protected function query($sql) {
 		$query = $this->db->query($sql);
 		$this->db->close();
 		return $query;
-	} 
+	}
 }
 
  ?>

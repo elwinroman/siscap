@@ -1,9 +1,10 @@
 <?php 
+session_start();
 require_once 'core/ControladorBase.php';
 require_once 'core/ModelBase.php';
-require 'autoload.php';
-require 'views/layout/header.php';
-require 'views/layout/sidebar.php';
+require_once 'autoload.php';
+require_once 'views/layout/header.php';
+require_once 'views/layout/sidebar.php';
 
 /* Comprueba si el controlador existe y es válido. */
 if(isset($_GET['controller'])) {
@@ -26,12 +27,11 @@ if(isset($_GET['controller'])) {
 } else
 	PAGE_NOT_FOUND('No es valido el nombre controlador');
 
-require 'views/layout/footer.php';
+require_once 'views/layout/footer.php';
 
 /* Mensaje de página no encontrada */
 function PAGE_NOT_FOUND($msg='') {
 	echo 'La página que buscas no existe' . '<br>';
 	echo $msg;
-	exit();	
 }
  ?>

@@ -3,29 +3,51 @@ class OficinaController extends ControladorBase {
 	public function __construct() {
 		parent::__construct();
 	}
-	public function formularioOficina() {
+	public function mostrarFormulario() {
 		require_once 'views/oficina/formulario.php';
+
+		// Liberar cookies
+		if(isset($_SESSION['oficina']['crearOficina']))
+			unset($_SESSION['oficina']['crearOficina']);
 	}
-	public function crearOficina() {
+	public function crear() {
 
 		// Condición general
-		if(isset($_POST)) {
+		if(isset($_POST['nombre'])) {
 			$oficina = new Oficina();
-			// Condición para crear Suboficina 
-			if(isset($_POST['nombre']) && isset($_POST['check']) && isset($_POST['oficina'])) {
-				$id_oficinaJefe = intval($_POST['oficina']);
-				$oficina->setNombre(limpiarCadena($_POST['nombre']));
-				$oficina->setOficinaId($id_oficinaJefe);
-			} 
-			// Condición para crear Oficina-jefe
-			else if(isset($_POST['nombre'])) {
-				$oficina->setNombre(limpiarCadena($_POST['nombre']));
-				$oficina->setOficinaId('null');
-			}
-		} else
-			// redirecionar();
 
-		die();
+			$oficina->setNombre(limpiarCadena($_POST['nombre']));
+			
+			// Condición para crear Suboficina u Oficina Jefe 
+			if(isset($_POST['check']) && isset($_POST['oficina-jefe']))
+				$oficina->setOficinaId(intval($_POST['oficina-jefe']));
+			else 
+				$oficina->setOficinaId('null');
+
+			$exito = $oficina->insertar();
+			
+			// Consulta exitosa
+			if($exito) {
+				$id = strval($oficina->getId());
+				$_SESSION['oficina']['crearOficina'] = 'success';
+				header("Location: ?controller=Oficina&action=mostrar&id=".$id);
+			}	// Consulta fallida
+			else {
+				$_SESSION['oficina']['crearOficina'] = 'unsuccess';
+				header("Location: ?controller=Oficina&action=mostrarFormulario");
+			}
+		}
+	}
+	public function listar() {
+		require_once 'views/oficina/lista.php';
+	}
+	public function mostrar() {
+		require_once 'views/oficina/mostrar.php';
+
+		// Liberar cookies
+		if(isset($_SESSION['oficina']['crearOficina']))
+			unset($_SESSION['oficina']['crearOficina']);
+
 	}
 }
  ?>
