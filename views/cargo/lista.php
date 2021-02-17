@@ -11,3 +11,9 @@
 		</div>
 	</div>
 </div>
+
+<?php if(isset($_SESSION['cargo']['eliminar'])): ?>
+	<div id="alerta-eliminar-cargo" class="alerta-msg">
+		<?=$_SESSION['cargo']['eliminar'];?>		
+	</div>
+<?php endif; ?>

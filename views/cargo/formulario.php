@@ -15,34 +15,35 @@
 					<label for="nr-plaza">Nro de plaza</label>
 					<input class="form-control form-control-sm" type="text" name="nro-plaza" maxlength="3" pattern="\s*[0-9]{3}\s*" required>
 				</div>
-				<div class="col field">		<!-- Field REGIMEN-LABORAL -->
-					<label for="regimen-laboral">Régimen Laboral</label><br>
-					<select class="mySelectr regimen-select" name="regimen-laboral" required>
+				<!--  
+				<div class="col field">-->		<!-- Field REGIMEN-LABORAL -->
+					<!-- <label for="regimen-laboral">Régimen Laboral</label><br>
+					<select class="mySelectr regimen-select" name="regimen-laboral">
 						<option value="1">728</option>
 						<option value="2">276</option>
 	  				</select>
-				</div>
+				</div> -->
 			</div>
 			<div class="row align-items-end">
 				<div class="col field">	 <!-- Field CARGO DE CONFIANZA -->
 					<label class="d-block" for="cargo-confianza">¿Cargo de confianza?</label>
 					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="cargo-confianza" value="si" required>
+						<input class="form-check-input" type="radio" name="cargo-confianza" value="1" required>
 						<label class="form-check-label">Si</label>
 					</div>	
 					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="cargo-confianza" value="no" required>
+						<input class="form-check-input" type="radio" name="cargo-confianza" value="0" required>
 						<label class="form-check-label">No</label>
 					</div>
 				</div>
 				<div class="col field">	 <!-- Field CARGO JEFE -->
 					<label class="d-block" for="cargo-jefe">¿Cargo jefe?</label>
 					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="cargo-jefe" value="si" required>
+						<input class="form-check-input" type="radio" name="cargo-jefe" value="1" required>
 						<label class="form-check-label">Si</label>
 					</div>	
 					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="cargo-jefe" value="no" required>
+						<input class="form-check-input" type="radio" name="cargo-jefe" value="0" required>
 						<label class="form-check-label">No</label>
 					</div>
 				</div>
@@ -79,9 +80,15 @@
 			<i class="zmdi zmdi-floppy"></i>
 			<span>Guardar</span>
 		</button>
-		<button type="button" class="btn btn-danger">
+		<button type="button" class="btn btn-danger btn-cancelar">
 			<i class="zmdi zmdi-floppy"></i>
 			<span>Cancelar</span>
 		</button>
 	</div>
 </form>
+
+<?php if(isset($_SESSION['cargo']['crear'])): ?>
+	<div id="alerta-crear-cargo" class="alerta-msg">
+		<?=$_SESSION['cargo']['crear'];?>
+	</div>
+<?php endif; ?>

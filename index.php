@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 require_once 'core/ControladorBase.php';
 require_once 'core/ModelBase.php';
@@ -17,7 +17,7 @@ if(isset($_GET['controller'])) {
 		// Comprueba si existe el método en la clase y sea válido.
 		if(isset($_GET['action']) && method_exists($name_controller, $_GET['action'])) {
 			$action = $_GET['action'];
-			$ClassController::$action();
+			$ClassController->$action();
 		} else
 			PAGE_NOT_FOUND('No es válido el método-acción o no existe');
 

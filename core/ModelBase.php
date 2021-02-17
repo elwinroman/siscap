@@ -2,15 +2,10 @@
 class ModelBase {
 	private $database;	// Object DATABASE
 	private $db;		// Base de datos conectada
-	private $table;
 
 	protected function __construct() {
-		require 'config/bd.php';
+		require_once 'config/bd.php';
 		$this->database = new Database();
-		$this->db = $this->database->conectar();
-	}
-	protected function reconectar() {
-		$this->db = $this->database->conectar();	
 	}
 	/**
 	 * Consulta query segura
@@ -45,10 +40,30 @@ class ModelBase {
 	 * @return {Object mysqli_result} $query
 	 */
 	protected function query($sql) {
+		$this->db = $this->database->conectar();
 		$query = $this->db->query($sql);
 		$this->db->close();
 		return $query;
 	}
-}
+	// Selecciona datos de una tabla mediante ID
+	public function getById($id, $table) {
+		$sql = "SELECT * FROM $table WHERE id=$id";
+		return $this->query($sql);
+	}
+	/**
+	 * Obtiene solo el ID de un registro
+	 * @param {String} $table
+	 * @param {String} $attrName
+	 * @param {String} $attrValue
+	 */
+	protected function getOnlyId($table, $attrName, $attrValue) {
+		$sql = "SELECT id FROM $table WHERE $attrName = '$attrValue'";
+		$resultado = $this->query($sql);
 
+		if($resultado && mysqli_num_rows($resultado) == 1) {
+			while($id = mysqli_fetch_assoc($resultado))
+				return $id['id'];
+		}
+	} 
+}
  ?>

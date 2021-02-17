@@ -26,8 +26,8 @@ class AjaxModel {
 	 * Obtiene lista de todas las oficinas
 	 * @return {Object mysqli_result} $result
 	 */
-	public function getOficinasList() {
-		$sql = "SELECT nombre, id, oficina_id FROM oficinas";
+	public function listarOficinas() {
+		$sql = "SELECT nombre, id, oficina_id FROM oficinas ORDER BY nombre";
 		$result = $this->query($sql);
 		return $result;
 	}
@@ -45,7 +45,7 @@ class AjaxModel {
 	 * Obtiene lista de todas los cargos
 	 * @return {Object mysqli_result} $result
 	 */
-	public function getCargosList($fecha_hoy) {
+	public function listarCargos($fecha_hoy) {
 		$sql_trabajador_actual = "SELECT CONCAT(nombre, ' ', apellidos, '-', count(*)) FROM trabajadores 
 				INNER JOIN contratos ON trabajadores.id = trabajador_id 
 				WHERE cargo_id = c.id AND (fecha_salida > '$fecha_hoy' OR fecha_salida IS NULL)";
@@ -55,6 +55,16 @@ class AjaxModel {
 			INNER JOIN oficinas AS o ON c.oficina_id = o.id";
 
 		$result = $this->query($sqlMain);
+		return $result;
+	}
+	/**
+	 * Establece un valor 0 o 1 en el estado de presupuest de un cargo
+	 * @param {String} $id_cargo
+	 * @param {String} $new_status
+	 */
+	public function setEstadoPresupuesto($id_cargo, $new_status) {
+		$sql = "UPDATE cargos SET estado_presupuesto = $new_status WHERE id = $id_cargo";
+		$result = $this->query($sql);
 		return $result;
 	}
 }

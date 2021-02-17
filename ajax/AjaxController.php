@@ -5,7 +5,7 @@ require_once '../core/helpers.func.php';
 class AjaxController {
 
 	// Obtiene lista de oficinas-jefe 
-	public static function getOficinasJefe() {
+	public function getOficinasJefe() {
 
 		$consulta = new AjaxModel();
 		$resultado = $consulta->getOficinasJefe();
@@ -21,9 +21,9 @@ class AjaxController {
 	}
 
 	// Obtiene lista de las Oficinas para el datatable-oficina
-	public static function getOficinasList() {
+	public function listarOficinas() {
 		$consulta = new AjaxModel();
-		$resultado = $consulta->getOficinasList();
+		$resultado = $consulta->listarOficinas();
 		
 		$htmlIconOpen = "<i class='icon-datatable-link zmdi zmdi-link' data-id='";
 		$htmlIconClose = "'></i>";
@@ -65,7 +65,7 @@ class AjaxController {
 	 * Obtiene lista de suboficinas de una oficina-jefe
 	 * @param {String} $id
 	 */
-	public static function getSuboficinasEspecificas($idOficinaJefe) {
+	public function getSuboficinasEspecificas($idOficinaJefe) {
 		$consulta = new AjaxModel();
 		$resultado = $consulta->getSuboficinasEspecificas($idOficinaJefe);
 		$suboficinas = [];
@@ -80,10 +80,10 @@ class AjaxController {
 		} else echo 'error';
 	}
 	// Obtiene lista de los Cargos para el datatable-cargo
-	public static function getCargosList() {
+	public function listarCargos() {
 		$fecha_hoy = date("Y-m-d");
 		$consulta = new AjaxModel();
-		$resultado = $consulta->getCargosList($fecha_hoy);
+		$resultado = $consulta->listarCargos($fecha_hoy);
 
 		$htmlIconOpen = "<i class='icon-datatable-link zmdi zmdi-link' data-id='";
 		$htmlIconClose = "'></i>";
@@ -100,7 +100,8 @@ class AjaxController {
 					$nombreCargo = my_mb_ucwords($data['cargo']);		// Columna CARGO
 					$nombreOficina = my_mb_ucwords($data['oficina']);	// Columna OFICINA
 					$nroPlaza = $data['nro_plaza'];						// Columna #
-					$link = $htmlIconOpen.$nroPlaza.$htmlIconClose;
+					$id = $data['id'];
+					$link = $htmlIconOpen.$id.$htmlIconClose;
 					
 					// Para la Columna OCUPANTE
 					$ocupante;
@@ -121,6 +122,20 @@ class AjaxController {
 				echo json_encode($cargos);
 			} else echo 'empty';
 		} else echo 'error';
+	}
+	/**
+	 * Cambia el estado de presupuesto de un cargo
+	 * @param {String} $id_cargo	[Number]
+	 * @param {String} $new_status  [Number]
+	 */
+	public function setEstadoPresupuesto($id_cargo, $new_status) {
+		$peticion = new AjaxModel();
+		$resultado = $peticion->setEstadoPresupuesto($id_cargo, $new_status);
+		echo $resultado;		
+		if($resultado)
+			echo 'petition successfully';
+		else
+			echo 'error sending petition';
 	}
 }
 // $consulta = new AjaxController();

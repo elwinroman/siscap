@@ -1,6 +1,6 @@
 <h1>CREAR OFICINA</h1>
 <form id="form-oficina" class="container-fluid needs-validation" novalidate autocomplete="off" action="?controller=Oficina&action=crear" method="POST">
-	<div class="col-sm box">
+	<div class="box">
 		<div class="field">		<!-- Field NOMBRE -->
 			<label for="nombre">Nombre</label>
 			<input class="form-control form-control-sm" type="text" name="nombre" maxlength="50" pattern="\s*([A-Za-zÀ-ÿ]\s?)+\s*" required autofocus>
@@ -22,19 +22,19 @@
 	</div>
 
 	<div class="btn-group btn-group-sm">
-		<button type="submit" class="btn btn-primary" id="save-button">
+		<button type="submit" class="btn btn-primary">
 			<i class="zmdi zmdi-floppy"></i>
 			<span>Guardar</span>
 		</button>
-		<button type="button" class="btn btn-danger">
-			<i class="zmdi zmdi-close-circle"></i>
+		<button type="button" class="btn btn-danger btn-cancelar">
+			<i class="zmdi zmdi-close"></i>
 			<span>Cancelar</span>
 		</button>
 	</div>
 </form>
 
-<?php if(isset($_SESSION['oficina']['crearOficina'])): ?>
-	<div id="alerta-crear-oficina" style="display: none">
-		<?=$_SESSION['oficina']['crearOficina'];?>		
+<?php if(isset($_SESSION['oficina']['crear'])): ?>
+	<div id="alerta-crear-oficina" class="alerta-msg">
+		<?=$_SESSION['oficina']['crear'];?>		
 	</div>
 <?php endif; ?>

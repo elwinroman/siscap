@@ -6,11 +6,19 @@
 a {
 	text-decoration: none;
 }
+h5 {
+	margin: 0;
+}
 button {
-	font-size: inherit !important;
+	font-size: .95rem !important;
 }
 button i {
-	font-size: 1.06rem !important;	
+	font-size: 1.08rem !important;	
+}
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
 }
 body {
 	overflow: auto;
@@ -62,6 +70,12 @@ nav#sidebar-menu {
 	font-family: "Roboto bold",Arial,Helvetica,Verdana;
 	font-size: 0.87rem;
 	transition: transform .2s ease-out;
+}
+#sidebar-menu.slide-up {
+	transform: translate(0, -101%);
+}
+#sidebar-menu.slide-left {
+	transform: translate(-101%, 0);
 }
 nav div.menu-title {
 	display: flex;
@@ -163,6 +177,7 @@ section.contenido {
 	min-height: 88vh;
 	padding-top: 40px;
 	font-family: "Roboto", Arial, Helvetica, Verdana !important;
+	font-size: 0.93rem;
 }
 .contenido > h1 {
 	line-height: 50px;
@@ -170,12 +185,8 @@ section.contenido {
 	border: 1px solid red;
 	text-align: center;
 	font-family: "roboto bold";
+	text-transform: uppercase;
 	/*color: white;*/
-}
-/* Formularios */
-form {
-	font-size: 0.93rem;
-	padding-bottom: 10px; 
 }
 div.box {
 	background: white;
@@ -189,18 +200,34 @@ div.box:nth-child(1) {
 div.box:nth-child(2) {
 	margin: 2px 8px 10px 0;	/* top-right-bottom-left */
 }
-div.box div.field {
+div.box div.titulo {
+	color: darkblue;
+	font-family: "Roboto bold";
+	font-size: 0.96rem;
+}
+div.field {
 	margin-bottom: 8px;
 }
-label:not(.gender) {	/* !!cambiar el nombre de la clase */
-	margin-bottom: 2px;
+.my-card {
+	max-width: 130px;
+	border-radius: 4px;
+	border: 1px solid rgba(0, 0, 0, 0.025);
+	font-family: "Roboto bold";
+	font-size: 0.75rem;
+}
+.alerta-msg {
+	display: none;
+}
+/* Formularios */
+form {
+	font-size: 0.93rem;
+	padding-bottom: 10px; 
 }
 label.label-disabled {
 	color: #c3c3c3;
 }
-div.box > div.titulo {
-	font-family: "Roboto bold";
-	color: darkblue;
+label:not(.gender) {	/* !!cambiar el nombre de la clase */
+	margin-bottom: 2px;
 }
 div.btn-group {
 	display: block;
@@ -214,20 +241,61 @@ div.btn-group {
 	min-width: 180px;
 	max-width: 210px;
 }
-/* Formulario OFICINA */
+/* /////////// OFICINA /////////// */
 #form-oficina {
 	width: 80%;
 }
-/* Datatable OFICINA */
-div#lista-oficina,
-div#lista-cargo {
-	font-size: 0.93rem;
+.modal #form-oficina {
+	width: 100%;
 }
 #dt-cargo > thead > tr > th:nth-child(2),
 #dt-cargo > thead > tr > th:nth-child(3) {
 	width: 20%;
 }
+/* //////////// CARGO ////////////// */
+.cargo-status {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 190px;
+	background: #5c9ada;
+	padding: 5px 10px;
+	color: #fff;
+	border-color: #5c9ada;
+	border-radius: 3px;
+}
+.status-presupuesto {
+	/*border: 1px solid0 blue;*/
+	text-align: right;
+}
+.status-presupuesto > input {
+	float: right !important;
+}
 
+
+/* ///////////////////////////////// */
+#modal-main {
+	display: none;
+	top: 0%;
+	position: fixed;
+	z-index: 11000;
+	height: 100vh;
+	width: 100vw;
+	background-color: rgba(0,0,0,.2);
+	transition: all .2s ease-in-out;
+}
+#modal-main.on {
+	display: block;
+}
+footer {
+	height: 72px;
+	width: 100%;
+	background-color: #444;
+	box-shadow: 0 1px 7px 0 rgba(0,0,0,0.12), 0 2px 5px 0 rgba(0,0,0,0.1);
+	text-align: center;
+	color: #ffffffbf;
+	padding: 25px 0;
+}
 /*///////////////////////////////////*/
 /* Datatables plugin */
 div.dataTable-wrapper {
@@ -244,7 +312,7 @@ div.dataTable-wrapper {
 	font-size: .875rem;
 	color: #495057;
 }
-thead {
+.dataTable-wrapper thead {
 	background: #F4F5F9;
 }
 .dataTable-sorter::after,
@@ -269,7 +337,7 @@ thead {
 }
 .dataTable-table i.icon-datatable-link {
 	pointer-events: auto !important;
-	font-size: 1.3rem;
+	font-size: 1.26rem;
 	padding: 4px 6px;
 	border-radius: 100%;
 	vertical-align: middle;
@@ -368,35 +436,4 @@ thead {
 		width: 100%;
 		text-align: center;
 	}
-}
-/*GUARDAR POSIBLES USOS - FOOTER*/
-footer {
-	height: 72px;
-	width: 100%;
-	background-color: #444;
-	box-shadow: 0 1px 7px 0 rgba(0,0,0,0.12), 0 2px 5px 0 rgba(0,0,0,0.1);
-	text-align: center;
-	color: #ffffffbf;
-	padding: 25px 0;
-}
-#modal-main {
-	display: none;
-	top: 0%;
-	position: fixed;
-	z-index: 11000;
-	height: 100vh;
-	width: 100vw;
-	background-color: rgba(0,0,0,.2);
-	transition: all .2s ease-in-out;
-}
-#modal-main.on {
-	display: block;
-}
-.my-card {
-	/*max-width: 400px;*/
-	max-width: 130px;
-	border-radius: 4px;
-	border: 1px solid rgba(0, 0, 0, 0.025);
-	font-family: "Roboto bold";
-	font-size: 0.75rem;
 }
