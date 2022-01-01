@@ -7,6 +7,7 @@
  * Version: 1.6.16
  * 
  * New Update personalized by me, to ignore accents in searches (+) 
+ * NEW UPDATE FOR ME WITH THE "removeAccents" FUNCTIONS TO IGNORE SPANISH ACCENTS.
  */
 (function(root, factory) {
     var plugin = "DataTable";

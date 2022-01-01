@@ -1,88 +1,228 @@
-@font-face {
-    font-family: "Roboto";
-    src: url("../fonts/roboto-regular.ttf"), 
-    url("../fonts/roboto-regular.eot"), 
-    url("../fonts/roboto-regular.woff"), 
-    url("../fonts/roboto-regular.woff2"), 
-    url("../fonts/roboto-regular.svg");
-}
-@font-face {
-  font-family: "Roboto bold";
-  src: url(../fonts/Roboto-Bold.ttf);
-}
-/* Niveles de color: 0(claro)-5(oscuro) */
-:root {
-	--dark5: #161e2e;
-	--dark4: #252f3f;
-	--dark3: #4b5563;
-	--dark0: #b1b1b1;
-	--red: #fd3256;
-	--morado: #70608f;
-	--black: black;
-	--white: white;
-}
-/* Dark style */
-nav.dark-style { 
-	background: var(--dark4); 
-	color: var(--dark0);
-}
-nav.dark-style div.menu-title { background: #161e2e; }
-nav.dark-style div.menu-title span { color: var(--white); }
-nav.dark-style div.menu-title i:hover { color: var(--white); }
-
-nav.dark-style div.ui figure figcaption { color: var(--white); }
-nav.dark-style div.ui div.opt {
-	border-bottom: 1px solid var(--dark0);
-	border-top: 1px solid var(--dark0);
-}
-nav.dark-style div.opt i.zmdi-settings:hover { color: white; }
-nav.dark-style div.opt i.zmdi-power:hover { color: var(--red); }
-
-nav.dark-style a.menu-item {
-	background: var(--dark4);
-}
-
-nav.dark-style a.menu-item:hover,
-nav.dark-style a.menu-item.active {
-	background: #161e2e;
-	color: var(--white);
-}
-nav.dark-style div.submenu-box { 
-	background-color: #161e2e; 
-}
-nav.dark-style a.submenu-item:hover,
-nav.dark-style a.submenu-item.active { 
-	border-right: 5px solid var(--morado);
-	/*color: var(--morado);*/
-	background: white;
-}
-
 /* Light-style */
-nav.light-style {
-	background: var(--white);
-	color: var(--dark3);
+body.light nav.sidebar {
+	background-color: #f5f5f5;
 }
-nav.light-style div.menu-title { background: #eaecf1; }
-nav.light-style div.menu-title span { color: var(--black); }
-nav.light-style div.menu-title i:hover { color: var(--black); }
+body.light div.menu-title,
+body.light a.menu-item,
+body.light a.submenu-item { 
+	color: #6e768e;
+}
+body.light.shortened ul.submenu-box {
+	background-color: white;
+}
+/* Main section (NAVBAR) */
+body.light ul.nav-list {
+	background-color: #545a6a;
+}
+body.light .dropdown-menu {
+	border: none;
+}
+body.light .title-dropdown,
+body.light .dropdown-item i,
+body.light .dropdown-item span {
+	color: #6c757d;
+}
+body.light .dropdown-item:hover i,
+body.light .dropdown-item:hover span {
+	color: #272e37;
+}
+body.light .dropdown-item:hover {
+	background-color: #e9ecef;
+}
+/* Main section (CONTENT) */
+body.light div.content-page {
+	background-color: #fafafa;
+	color: #6c757d;
+}
+body.light div.box {
+	background-color: #fff;
+	border-color:  #f7f7f7;
+}
+body.light .box-title {
+	color: #444;
+}
+body.light footer {
+	background-color: #eaeaea;
+}
+/* adding new options */
+body.light .dataTable-selector,
+body.light .dataTable-input,
+body.light .selectr-selected,
+body.light .form-control {
+	border-color: #ced4da;
+	color: inherit;		/* section.contenido LEGACY */
+}
+body.light .form-control:focus,
+body.light .dataTable-selector:focus,
+body.light .dataTable-input:focus,
+body.light .selectr-selected:focus,
+body.light .selectr-container.open .selectr-selected,
+body.light .selectr-container.open.inverted .selectr-selected {
+	color: #495057;
+	border-color: #45aef1;
+}
+body.light .dataTable-input::placeholder,
+body.light .selectr-placeholder,
+body.light .form-control::placeholder {
+	color: #98a6ad;
+}
+body.light .selectr-disabled .selectr-selected:focus,
+body.light .selectr-disabled .selectr-selected {
+	border-color: #ced4da;
+	background: #f1f5f7;
+}
+body.light .selectr-option.selected {
+	/*background-color: #;*/
+}
+body.light .selectr-option.selected.active,
+body.light .selectr-option.active {
+	background-color: #f6f6f6;
+	color: inherit;		/* section.cotenido LEGACY */
+}
+body.light .dataTable-table > thead > tr > th,
+body.light .dataTable-table > tbody > tr > td {
+	border-color: #dee2e6;
+}
+body.light .dataTable-pagination a {
+	color: #323a46;
+}
+body.light .dataTable-pagination li:not(.active) > a:hover {
+	background: #e9ecef;
+}
 
-nav.light-style div.ui figure figcaption { color: var(--black); }
-nav.light-style div.ui div.opt {
-	border-bottom: 1px solid gray;
-	border-top: 1px solid gray;
-}
-nav.light-style div.opt i.zmdi-settings:hover { color: var(--black); }
-nav.light-style i.zmdi-power:hover { color: var(--red); }
+/*======= DARK STYLE =======*/
+/*##########################*/
 
-nav.light-style a.menu-item:hover,
-nav.light-style a.menu-item.active {
-	background: #eaecf1;
-	color: var(--black);
+/* Sidebar */
+body.dark nav.sidebar {
+	background-color: #343b4a;
 }
-nav.light-style div.submenu-box { background-color: #eaecf1; }
-nav.light-style a.submenu-item:hover,
-nav.light-style a.submenu-item.active {
-	border-right: 5px solid var(--morado);
-	/*color: var(--morado);*/
-	color: red;
+body.dark div.menu-title,
+body.dark a.menu-item,
+body.dark a.submenu-item { 
+	color: #9097a7;
+}
+body.dark.shortened ul.submenu-box {
+	background-color: #303644;
+}
+/* Main section (NAVBAR) */
+body.dark ul.nav-list {
+	background-color: #303644;
+}
+body.dark .dropdown-menu {
+	background-color: #2c313e;
+	border: 1px solid #323847;
+}
+body.dark .dropdown-item i,
+body.dark .dropdown-item span {
+	color: #adb5bd;
+}
+body.dark .dropdown-item:hover i,
+body.dark .dropdown-item:hover span {
+	color: #f1f5f7;
+}
+body.dark .dropdown-item:hover {
+	background-color: #303644;
+}
+body.dark .title-dropdown,
+body.dark .box-title {
+	color: #dee2e6;
+}
+body.dark div.content-page {
+	background-color: #2c313e;
+	color: #adb5bd;
+}
+body.dark div.box {
+	background-color: #2c313e;
+	border-color: #303644;
+}
+body.dark footer {
+	background-color: #303543;
+}
+
+/* adding new options */
+body.dark .content-header > h1 {
+	color: #f1f5f7;
+}
+body.dark input[type="date"]::-webkit-calendar-picker-indicator {
+	filter: invert(0.7);
+}
+body.dark .dataTable-selector,
+body.dark .dataTable-input,
+body.dark .selectr-selected,
+body.dark .form-check:not(.form-switch) input.form-check-input:not(:checked),
+body.dark .form-control {
+	background: #303644;
+	border-color: #343a4a;
+	color: inherit;		/* section.contenido LEGACY */
+}
+body.dark .dataTable-selector:focus,
+body.dark .dataTable-input:focus,
+body.dark .selectr-selected:focus, 
+body.dark .form-control:focus {
+	border-color: #45aef1;
+	background-color: #323847;
+}
+body.dark .dataTable-input::placeholder,
+body.dark .selectr-placeholder,
+body.dark .form-control::placeholder {
+	color: #6c7a86
+}
+body.dark .selectr-disabled .selectr-selected:focus,
+body.dark .selectr-disabled .selectr-selected {
+	border-color: #343a4a;
+	background-color: #444c61;
+}
+body.dark .selectr-options-container,
+body.dark .selectr-container.inverted .selectr-options-container {
+	background-color: #323847;
+}
+body.dark .selectr-option.selected {
+	background-color: #323847;
+}
+body.dark .selectr-option.active,
+body.dark .selectr-option.selected.active {
+	background-color: #373d4e;
+	color: inherit;		/* section.cotenido LEGACY */
+}
+/* Datatable styles */
+body.dark .dataTable-table > thead > tr > th,
+body.dark .dataTable-table > tbody > tr > td {
+	border-color: #343a4a;
+}
+body.dark .dataTable-pagination a {
+	color: #f1f5f7;
+}
+body.dark .dataTable-pagination li:not(.active) > a:hover {
+	background: #343a4a;
+}
+
+/* Modal */
+body.dark .modal {
+	/*background: rgba(255,255,255, 0.2);*/
+}
+body.dark .modal-content {
+	background-color: #2c313e;
+}
+body.dark .modal-header {
+	border-color: #343a4a;
+}
+body.dark .modal-header .btn-close {
+	filter: invert(0.7);
+}
+
+/* COMMON STYLES */
+body.dark a.menu-item:hover, body.dark a.submenu-item:hover,
+body.dark a.menu-item.active, body.dark a.submenu-item.active,
+body.light a.menu-item:hover, body.light a.submenu-item:hover,
+body.light a.menu-item.active, body.light a.submenu-item.active {
+	color: #00acc1;
+}
+body.dark .was-validated .selectr-selected.selectr-valid, 
+body.light .was-validated .selectr-selected.selectr-valid {
+	border-color: #25b343;
+}
+body.dark .was-validated .selectr-selected.selectr-invalid, 
+body.light .was-validated .selectr-selected.selectr-invalid {
+	border-color: #f1556c;
 }

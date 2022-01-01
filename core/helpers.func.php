@@ -1,7 +1,7 @@
 <?php 
 
 /**
- * Resetea una cadena reemplazando espacios en blanco en uno solo, convierte a minúsculas
+ * Resetea una cadena eliminando espacios en blanco en uno solo, convierte a minúsculas
  * @param{String} $cad
  * @return[String] $newCad
  */
@@ -35,5 +35,16 @@ function my_mb_ucwords($cad) {
 		$newCad .= (mb_strlen($word) < 3) ? mb_strtolower($word) . ' ' : $word . ' '; 
 	
 	return trim($newCad);
+}
+
+/**
+ * Cambia el formato de fecha de "d-m-Y" a "Y-m-d"
+ * @param{String} $date
+ * @param{String} $format
+ * @return{String} $new_date
+ */
+function my_dateformat($date, $format) {
+	$new_date = new DateTime($date);
+	return $new_date->format($format);
 }
  ?>

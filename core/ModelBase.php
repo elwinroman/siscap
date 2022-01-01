@@ -1,20 +1,22 @@
 <?php 
 class ModelBase {
-	private $database;	// Object DATABASE
-	private $db;		// Base de datos conectada
+	private $db;			// Object Database
+	private $conn;			// Conexión a la base de datos
+	private $num_affected_rows;
 
 	protected function __construct() {
 		require_once 'config/bd.php';
-		$this->database = new Database();
+		$this->db = new Database();
 	}
 	/**
-	 * Consulta query segura
-	 * @param {String} $sql => Consulta SQL preparada
-	 * @param {Array} $data => Datos de consulta
-	 * @param {String} $bind => 
+	 * Sentencia query preparada
+	 * @param{String} query
+	 * @param{Array} args
+	 * @return{mysqli_result} res
 	 */
-	protected function queryPrepared($query, array $args) {
-		$stmt   = $this->prepare($query);
+	protected function preparedQuery($query, array $args) {
+		$this->conn = $this->db->connect();
+		$stmt   = $this->conn->prepare($query);
         $params = [];
         $types  = array_reduce($args, function ($string, &$arg) use (&$params) {
             $params[] = &$arg;
@@ -25,43 +27,54 @@ class ModelBase {
             return $string;
         }, '');
         array_unshift($params, $types);
-
         call_user_func_array([$stmt, 'bind_param'], $params);
 
-        $result = $stmt->execute() ? $stmt->get_result() : false;
+        // para SELECT devuelve un conjunto de resultados
+        // para otras consultas DML devuelve FALSE
+        if($stmt->execute()) {
+        	$res = $stmt->get_result();
+        	if(!$res) $res = true;
+        } else $res = false;
 
+        $this->num_affected_rows = mysqli_affected_rows($this->conn);
         $stmt->close();
-
-        return $result;
+        return $res;
 	}
 	/**
-	 * Consulta query normal
-	 * @param {String} $sql
-	 * @return {Object mysqli_result} $query
+	 * Sentencia query normal
+	 * @param{String} query
+	 * @return{mysqli_result} res
 	 */
-	protected function query($sql) {
-		$this->db = $this->database->conectar();
-		$query = $this->db->query($sql);
-		$this->db->close();
-		return $query;
+	protected function query($query) {
+		$this->conn = $this->db->connect();
+		$res = $this->conn->query($query);
+		$this->num_affected_rows = mysqli_affected_rows($this->conn);
+		$this->conn->close();
+		return $res;
 	}
-	// Selecciona datos de una tabla mediante ID
+	/**
+	 * Selecciona datos de una tabla mediante id
+	 * @param{Int} id
+	 * @param{mysqli_result} res
+	 */
 	public function getById($id, $table) {
-		$sql = "SELECT * FROM $table WHERE id=$id";
-		return $this->query($sql);
+		$query = "SELECT * FROM $table WHERE id=?";
+		$res = $this->preparedQuery($query, [$id]);
+		return $res;
 	}
 	/**
-	 * Obtiene solo el ID de un registro
-	 * @param {String} $table
-	 * @param {String} $attrName
-	 * @param {String} $attrValue
+	 * Obtiene solo el id de un registro mediante un campo UNIQUE
+	 * @param{String} tabla
+	 * @param{String} campo
+	 * @param{String} valor 	//-..-
+	 * @return{String} id
 	 */
-	protected function getOnlyId($table, $attrName, $attrValue) {
-		$sql = "SELECT id FROM $table WHERE $attrName = '$attrValue'";
-		$resultado = $this->query($sql);
+	protected function getOnlyId($tabla, $campo, $valor) {
+		$query = "SELECT id FROM $tabla WHERE $campo = '$valor'";
+		$res = $this->query($query);
 
-		if($resultado && mysqli_num_rows($resultado) == 1) {
-			while($id = mysqli_fetch_assoc($resultado))
+		if($res && mysqli_num_rows($res) == 1) {
+			while($id = mysqli_fetch_assoc($res))
 				return $id['id'];
 		}
 	} 

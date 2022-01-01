@@ -1,5 +1,15 @@
 <?php
 class CargoController extends ControladorBase {
+	private $url = [
+		'mostrar'	=> '?controller=Cargo&action=mostrar&id=',
+		'formulario'=> '?controller=Cargo&action=mostrarFormulario',
+		'listar'	=> '?controller=Cargo&action=listar',
+		'editar'	=> '?controller=Cargo&action=editar&id='
+	];
+	public function __construct() {
+		parent::__construct();
+	}
+
 	public function mostrarFormulario() {
 		require 'views/cargo/formulario.php';
 
@@ -7,111 +17,122 @@ class CargoController extends ControladorBase {
 		if(isset($_SESSION['cargo']['crear']))
 			unset($_SESSION['cargo']['crear']);
 	}
-	public function crear() {
 
+	public function listar() {
+		require_once 'views/cargo/lista.php';
+
+		// Liberar cookies
+		if(isset($_SESSION['cargo']['eliminar']))
+			unset($_SESSION['cargo']['eliminar']);
+
+	}
+	public function crear() {
 		if(isset($_POST['nombre']) && isset($_POST['nro-plaza']) && isset($_POST['oficina-jefe']) && isset($_POST['cargo-confianza']) && isset($_POST['cargo-jefe'])) {
 
-			$cargo = new Cargo();
+			// Envia el ID dependiendo de si es oficina-jefe o es una suboficina
+			if(isset($_POST['check']) && isset($_POST['suboficina']))
+				$oficina_id = $_POST['suboficina'];
+			else
+				$oficina_id = $_POST['oficina-jefe'];
 
-			$datos = array(
-				'nombre' => limpiarCadena($_POST['nombre']),
-				'nroPlaza' => $_POST['nro-plaza'],
-				'idOficinaJefe' => $_POST['oficina-jefe'],
-				'cargoConfianza' => $_POST['cargo-confianza'],
-				'cargoJefe' => $_POST['cargo-jefe']
+			$datos_cargo = array(
+				'nombre' 		=> limpiarCadena($_POST['nombre']),
+				'nro_plaza'		=> $_POST['nro-plaza'],
+				'oficina_id' 	=> $oficina_id,
+				'cargo_confianza' => $_POST['cargo-confianza'],
+				'cargo_jefe'	=> $_POST['cargo-jefe']
 			);
 
 			// Setear datos
-			$cargo->setNombre($datos['nombre']);
-			$cargo->setNroPlaza($datos['nroPlaza']);
-			$cargo->setCargoConfianza($datos['cargoConfianza']);
-			$cargo->setCargoJefe($datos['cargoJefe']);
+			$new_cargo = new Cargo();
+			$new_cargo->setNombre($datos_cargo['nombre']);
+			$new_cargo->setNroPlaza($datos_cargo['nro_plaza']);
+			$new_cargo->setCargoConfianza($datos_cargo['cargo_confianza']);
+			$new_cargo->setCargoJefe($datos_cargo['cargo_jefe']);
+			$new_cargo->setOficinaId($datos_cargo['oficina_id']);
 
-			// Si el cargo pertenece a una suboficina se envia el id de la suboficina
-			if(isset($_POST['check']) && isset($_POST['suboficina'])) {
-				$idSuboficina = $_POST['suboficina'];
-				$cargo->setOficinaId($idSuboficina);
-			} 
-			else 	// Se envia el id de la oficina-jefe
-				$cargo->setOficinaId($datos['idOficinaJefe']);
-			
-			$resultado = $cargo->insertar();
-			if($resultado) {
-				$id = $cargo->getId();
+			// Crear un nuevo cargo en la base de datos
+			$res = $new_cargo->insertar();
+			if($res) {
 				$_SESSION['cargo']['crear'] = 'success';
-				$url = '?controller=Cargo&action=mostrar&id='.$id;
-				$this->redirect($url);
+				$id = $new_cargo->getId();
+				$this->redirect($this->url['mostrar'].$id);
 			} else {
 				$_SESSION['cargo']['crear'] = 'error';
-				$url = '?controller=Cargo&action=mostrarFormulario';
-				$this->redirect($url);
+				$this->redirect($this->url['formulario']);
 			}
 		}
 	}
 	public function mostrar() {
 		if(isset($_GET['id'])) {
-			$cargo = new Cargo();
-
 			$id = $_GET['id'];
+			$cargo = new Cargo();
 			$cargo->setId($id);
-			$nombreTabla = $cargo->getTable();
 
-			$resultado = $cargo->getById($id, $nombreTabla);
+			// Variable para guardar y mostrar los datos en la vista
+			$show = [
+				'cargo' => [
+					'id'	 	=> $id,
+					'nombre' 	=> '',
+					'nro_plaza' => '',	
+					'confianza'  => '',
+					'jefe'		=> ''  ,
+					'presupuesto' => '',
+					'trabajador_actual' => '',
+					'oficina'	=> ''		// oficina al que pertenece el cargo
+				],
+				'oficina' => [
+					'oficina_jefe' => '',
+					'suboficina' => null
+				]
+			];
 
-			// Obtener atributos del cargo
-			if($resultado && mysqli_num_rows($resultado) == 1) {
-				$dato = mysqli_fetch_assoc($resultado);
-				$cargo->setNombre($dato['nombre']);
-				$cargo->setNroPlaza($dato['nro_plaza']);
-				$cargo->setOficinaId($dato['oficina_id']);
-				$cargo->setCargoConfianza($dato['cargo_confianza']);
-				$cargo->setCargoJefe($dato['cargo_jefe']);
-				$cargo->setEstadoPresupuesto($dato['estado_presupuesto']);
-			
+			$res = $cargo->getById($id, 'cargos');
+			if($res && mysqli_num_rows($res) === 1) {
+				$dato_cargo = mysqli_fetch_assoc($res);
+				$show['cargo']['nombre'] = my_mb_ucwords($dato_cargo['nombre']);
+				$show['cargo']['nro_plaza'] = $dato_cargo['nro_plaza'];
+				$show['cargo']['confianza'] = intval($dato_cargo['cargo_confianza']);
+				$show['cargo']['jefe'] = intval($dato_cargo['cargo_jefe']);
+				$show['cargo']['presupuesto'] = $dato_cargo['estado_presupuesto'];
+				
 				// Obtener trabajador actual
-				$trabajadorActual = $cargo->getTrabajadorActual();
-				if($trabajadorActual) {
-					if(mysqli_num_rows($trabajadorActual) == 1) {
-						$data = mysqli_fetch_row($trabajadorActual); 
-						$trabajador = my_mb_ucwords($data[0]);
+				$trabajador_actual = $cargo->getTrabajadorActual();
+				if($trabajador_actual) {
+					if(mysqli_num_rows($trabajador_actual) == 1) {
+						$data = mysqli_fetch_row($trabajador_actual); 
+						$show['cargo']['trabajador_actual'] = my_mb_ucwords($data[0]);
 					} else
-						$trabajador = 'Vacante';
+						$show['cargo']['trabajador_actual'] = 'Vacante';
 				}
 
 				// Obtener nombre de la oficina
-				$oficinaName = "unknown";
+				$oficina_id = intval($dato_cargo['oficina_id']);
 				$oficina = new Oficina();
-				$idOficina = $cargo->getOficinaId();
-				$nombreTabla = $oficina->getTable();
-				$resultado = $oficina->getById($idOficina, $nombreTabla);
-				if($resultado && mysqli_num_rows($resultado) == 1) {
-					$dato = mysqli_fetch_assoc($resultado);
-					$oficinaName = my_mb_ucwords($dato['nombre']);
-					// $oficina->setNombre($dato['nombre']);
-					$oficina->setId($dato['id']);
-					$oficina->setOficinaId($dato['oficina_id']);
-				}
 
-				$oficinas_data = array(
-					'oficina' => null,
-					'suboficina' => null 
-				);
-				// Obtener oficinas o suboficinas dependiendo
+				$res = $oficina->getById($oficina_id, 'oficinas');
+				if($res && mysqli_num_rows($res) === 1) {
+					$dato_oficina = mysqli_fetch_assoc($res);
+					$show['cargo']['oficina'] = my_mb_ucwords($dato_oficina['nombre']);
+					
+					$oficina->setId($dato_oficina['id']);
+					$oficina->setOficinaId($dato_oficina['oficina_id']);
+				}	
+				
+				// Obtener oficina y/o suboficina para el MODAL editar
 				if($oficina->getOficinaId() === null) {
-					$oficinas_data['oficina'] = $cargo->getOficinaId();
+					$show['oficina']['oficina_jefe'] = $oficina_id;
 				} else {
-					$oficinaJefeData = $oficina->getOficinaJefe();
-					if(mysqli_num_rows($oficinaJefeData) === 1) {
-						$oficina_jefe = mysqli_fetch_assoc($oficinaJefeData);
-						$oficinas_data['oficina'] = $oficina_jefe['id'];
-					}
-					$oficinas_data['suboficina'] = $cargo->getOficinaId();
+					$res = $oficina->getOficinaJefe();
+					if(mysqli_num_rows($res) === 1) {
+						$data_oficina_jefe = mysqli_fetch_assoc($res);
+						$show['oficina']['oficina_jefe'] = $data_oficina_jefe['id'];
+					} else die('error');
+					$show['oficina']['suboficina'] = $oficina_id;
 				}
 				require_once 'views/cargo/mostrar.php';
-			} else {	// No existe cargo
-				$url = '?controller=Cargo&action=listar';
-				$this->redirect($url);
-			}
+			} else 	// No existe cargo
+				$this->redirect($this->url['listar']);
 		}
 
 		// Liberar cookies
@@ -120,13 +141,6 @@ class CargoController extends ControladorBase {
 		if(isset($_SESSION['cargo']['editar']))
 			unset($_SESSION['cargo']['editar']);
 	}
-	public function listar() {
-		require_once 'views/cargo/lista.php';
-
-		// Liberar cookies
-		if(isset($_SESSION['cargo']['eliminar']))
-			unset($_SESSION['cargo']['eliminar']);
-	}
 	public function editar() {
 		if(isset($_GET['id']) && isset($_POST['nombre']) && isset($_POST['nro-plaza']) && isset($_POST['oficina-jefe']) && isset($_POST['cargo-confianza']) && isset($_POST['cargo-jefe'])) {
 
@@ -134,8 +148,8 @@ class CargoController extends ControladorBase {
 			$id = $_GET['id'];
 
 			// Obtener datos de cargo para su comparación
-			$resultado = $cargo->getById($id, $cargo->getTable());
-			while($data = mysqli_fetch_assoc($resultado)) {
+			$res = $cargo->getById($id, $cargo->getTable());
+			while($data = mysqli_fetch_assoc($res)) {
 				$cargo->setNombre($data['nombre']);
 				$cargo->setNroPlaza($data['nro_plaza']);
 				$cargo->setOficinaId($data['oficina_id']);
@@ -143,10 +157,10 @@ class CargoController extends ControladorBase {
 				$cargo->setCargoConfianza($data['cargo_confianza']);
 			}
 
-			$nuevo_cargo = array(
-				'nombre' => limpiarCadena($_POST['nombre']),
+			$update_cargo = array(
+				'nombre' 	=> limpiarCadena($_POST['nombre']),
 				'nro_plaza' => $_POST['nro-plaza'],
-				'oficina_id' => $_POST['oficina-jefe'],
+				'oficina_id'=> intval($_POST['oficina-jefe']),
 				'cargo_confianza' => intval($_POST['cargo-confianza']),
 				'cargo_jefe' => intval($_POST['cargo-jefe'])
 			);
@@ -154,29 +168,23 @@ class CargoController extends ControladorBase {
 			// Si el cargo pertenece a una suboficina 
 			if(isset($_POST['check']) && isset($_POST['suboficina'])) {
 				$id_suboficina = $_POST['suboficina'];
-				$nuevo_cargo['oficina_id'] = $id_suboficina;
+				$update_cargo['oficina_id'] = $id_suboficina;
 			}
 
 			// Si hay cambios en los datos, se realiza la actualización
-			if($this->checkUpdates($nuevo_cargo, $cargo)) {
+			if($this->checkUpdates($update_cargo, $cargo)) {
 				$cargo->setId($id);
-				$cargo->setNombre($nuevo_cargo['nombre']);
-				$cargo->setNroPlaza($nuevo_cargo['nro_plaza']);
-				$cargo->setOficinaId($nuevo_cargo['oficina_id']);
-				$cargo->setCargoConfianza($nuevo_cargo['cargo_confianza']);
-				$cargo->setCargoJefe($nuevo_cargo['cargo_jefe']);
+				$cargo->setNombre($update_cargo['nombre']);
+				$cargo->setNroPlaza($update_cargo['nro_plaza']);
+				$cargo->setOficinaId($update_cargo['oficina_id']);
+				$cargo->setCargoConfianza($update_cargo['cargo_confianza']);
+				$cargo->setCargoJefe($update_cargo['cargo_jefe']);
 				
-				$resultado = $cargo->actualizar();
-				if($resultado)
-					$_SESSION['cargo']['editar'] = 'success';
-				else
-					$_SESSION['cargo']['editar'] = 'error';	
-
+				$res = $cargo->actualizar();
+				$_SESSION['cargo']['editar'] = ($res) ? 'success' : 'error';
 			} else 	// Ningún cambio
-				$_SESSION['cargo']['editar'] = 'nothing';
-			
-			$url = '?controller=Cargo&action=mostrar&id='.$id;
-			$this->redirect($url);
+				$_SESSION['cargo']['editar'] = 'info';
+			$this->redirect($this->url['mostrar'].$id);
 		}
 	}
 
@@ -189,21 +197,20 @@ class CargoController extends ControladorBase {
 			$cargo->eliminar();
 
 			$_SESSION['cargo']['eliminar'] = 'success';
-			$url = '?controller=Cargo&action=listar';
-			$this->redirect($url);
+			$this->redirect($this->url['listar']);
 		}
 	}
 
-	private function checkUpdates($nuevo_cargo, $cargo) {
-		if($nuevo_cargo['nombre'] !== $cargo->getNombre())
+	private function checkUpdates($update_cargo, $cargo) {
+		if($update_cargo['nombre'] !== $cargo->getNombre())
 			return true;
-		if($nuevo_cargo['nro_plaza'] !== $cargo->getNroPlaza())
+		if($update_cargo['nro_plaza'] !== $cargo->getNroPlaza())
 			return true;
-		if($nuevo_cargo['oficina_id'] !== $cargo->getOficinaId())
+		if($update_cargo['oficina_id'] !== $cargo->getOficinaId())
 			return true;
-		if($nuevo_cargo['cargo_confianza'] !== $cargo->getCargoConfianza())
+		if($update_cargo['cargo_confianza'] !== $cargo->getCargoConfianza())
 			return true;
-		if($nuevo_cargo['cargo_jefe'] !== $cargo->getCargoJefe())
+		if($update_cargo['cargo_jefe'] !== $cargo->getCargoJefe())
 			return true;
 		return false;
 	}

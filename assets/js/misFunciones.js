@@ -1,4 +1,3 @@
-
 "use strict";
 const SIZE_DEVICE = {
 	extraSmall 	: 400,	// ExtraSmall
@@ -6,55 +5,47 @@ const SIZE_DEVICE = {
 	medium		: 768	// Medium
 };
 const DEPARTAMENTO_PUNO = {
-	"Azángaro":["Azángaro","Achaya","Arapa","Asillo","Caminaca","Chupa","José Domingo Choquehuanca","Muñani","Potoni","Samán","San Antón","San José","San Juan de Salinas","Santiago de Pupuja","Tirapata"],
-	"Carabaya":["Ajoyani","Ayapata","Coasa","Corani","Crucero","Ituata","Macusani","Ollachea","San Gabán","Usicayos"],
-	"Chucuito":["Juli","Desaguadero","Huacullani","Kelluyo","Pisacoma","Pomata","Zepita"],
-	"El Collao":["Copaso","Conduriri","Ilave","Pilcuyo","Santa Rosa"],
-	"Huancané":["Cojata","Huancané","Huatasani","Inchupalla","Pusi","Rosaspata","Taraco","Vilque Chico"],
-	"Lampa":["Cabanilla","Calapuja","Lampa","Nicasio","Ocuviri","Palca","Paratía","Pucará","Santa Lucía","Vilavila"],
-	"Melgar":["Antauta","Ayaviri","Cupi","Llalli","Macari","Ñuñoa","Orurillo","Santa Rosa","Umachiri"],
-	"Moho":["Conima","Huayrapata","Moho","Tilali"],
-	"Puno":["Acora","Amantani","Atuncolla","Capachica","Chucuito","Coata","Huata","Mañazo","Paucarcolla","Pichacani","Platería","Puno","San Antonio","Tiquillaca","Vilque"],
-	"Sandia":["Alto Inambari","Cuyocuyo","Limbani","Patambuco","Quiaca","Phara","San Pedro de Putinapunco","Sandia","Yanahuaya","San Juan del Oro"],
+	"Azángaro" 	:["Azángaro","Achaya","Arapa","Asillo","Caminaca","Chupa","José Domingo Choquehuanca","Muñani","Potoni","Samán","San Antón","San José","San Juan de Salinas","Santiago de Pupuja","Tirapata"],
+	"Carabaya" 	:["Ajoyani","Ayapata","Coasa","Corani","Crucero","Ituata","Macusani","Ollachea","San Gabán","Usicayos"],
+	"Chucuito" 	:["Juli","Desaguadero","Huacullani","Kelluyo","Pisacoma","Pomata","Zepita"],
+	"El Collao"	:["Copaso","Conduriri","Ilave","Pilcuyo","Santa Rosa"],
+	"Huancané" 	:["Cojata","Huancané","Huatasani","Inchupalla","Pusi","Rosaspata","Taraco","Vilque Chico"],
+	"Lampa"	   	:["Cabanilla","Calapuja","Lampa","Nicasio","Ocuviri","Palca","Paratía","Pucará","Santa Lucía","Vilavila"],
+	"Melgar"	:["Antauta","Ayaviri","Cupi","Llalli","Macari","Ñuñoa","Orurillo","Santa Rosa","Umachiri"],
+	"Moho"		:["Conima","Huayrapata","Moho","Tilali"],
+	"Puno"		:["Acora","Amantani","Atuncolla","Capachica","Chucuito","Coata","Huata","Mañazo","Paucarcolla","Pichacani","Platería","Puno","San Antonio","Tiquillaca","Vilque"],
+	"Sandia"	:["Alto Inambari","Cuyocuyo","Limbani","Patambuco","Quiaca","Phara","San Pedro de Putinapunco","Sandia","Yanahuaya","San Juan del Oro"],
 	"San Antonio de Putina":["Ananea","Pedro Vilca Apaza","Putina","Quilcapuncu","Sina"],
-	"San Román":["Cabana","Cabanillas","Caracoto","Juliaca","San Miguel"],
-	"Yunguyo":["Yunguyo","Anapia","Copani","Cuturapi","Ollaraya","Tinicachi","Unicachi"]
+	"San Román"	:["Cabana","Cabanillas","Caracoto","Juliaca","San Miguel"],
+	"Yunguyo"	:["Yunguyo","Anapia","Copani","Cuturapi","Ollaraya","Tinicachi","Unicachi"]
 };
+
+const SISTEMA_PENSIONES = ["AFP Integra", "AFP Habitat", "AFP Prima", "AFP Profuturo", "ONP"];
+const CONDICION_CONTRATO = ["Repuesto Judicial", "Contrato", "Nombrado", "Permanente"];
 
 /////////////////////////////////////////////////////////////////////
 var Animation = {
 	/**
-     * Efecto SlideUp
-     * @param {DOMElement} element
-     * @param {Number} duration
+     * Efecto Collapse
+     * @param{DOMElement} element
+     * @param{Number} duration
      */
-	slideUp: function(element, duration = 400) {
+	collapse: function(element, duration = 400) {
 		if(document.body.contains(element)) {
 			element.style.height = 0;
-			element.style.transitionDuration = duration + "ms";
-			var submenuList = element.querySelectorAll("a.submenu-item");
-			for(var submenu of submenuList) {
-				submenu.style.transitionDuration = duration + "ms";
-				submenu.style.opacity = 0;
-				submenu.style.visibility = "hidden";
-			}
+			element.style.transitionDuration = duration+"ms";
 		}
 	},
     /**
-     * Efecto SlideDown
-     * @param {DOMElement} elemento
-     * @param {Number} duration
+     * Efecto Expand
+     * @param{DOMElement} elemento
+     * @param{Number} duration
      */
-	slideDown: function(element, duration = 400) {
+	expand: function(element, duration = 400) {
 		if(document.body.contains(element)) {
-			element.style.height = 80 + "px";
-			element.style.transitionDuration = duration + "ms";
-			var submenuList = element.querySelectorAll("a.submenu-item");
-			for(var submenu of submenuList) {
-				submenu.style.transitionDuration = duration + "ms";
-				submenu.style.opacity = 1;
-				submenu.style.visibility = "visible";
-			}
+			var sectionHeight = element.scrollHeight;
+			element.style.height = sectionHeight + "px";
+			element.style.transitionDuration = duration+"ms";
 		}
 	}
 }
@@ -135,11 +126,13 @@ function Ajax(newConfig) {
 		if(xhttp.readyState == 4) {
 		    if(xhttp.status == 200) {
 		    	if(xhttp.responseText === "error")
-		    		reject("a query error has ocurred");
+		    		reject("DATABASE ERROR, por favor contacte con su administrador de Base de Datos.");
 		    	else if(xhttp.responseText === "empty")
-		    		reject("no hay datos disponibles");
-		    	else
+		    		reject("Aún no hay datos disponibles.");
+		    	else {
+		    		// console.log(xhttp.responseText);
 		    		resolve(xhttp.responseText);
+		    	}
 		    }
 		    else
 		    	reject(xhttp.statusText);
@@ -220,24 +213,6 @@ var helper_function = {
 		for(var prop in object)
 			length++;
 		return length;
-	},
-	/** 
-	 * Remueve nombres de clases a una lista de elementos 
-	 * @param{HTMLCollection} elementList 	=> Lista de nodos
-	 * @param{string} nameClass 			=> Nombre de clase
-	 */
-	myRemoveClass: function(elementList, nameClass) {
-		for(var element of elementList)
-			element.classList.remove(nameClass);
-	},
-	/** 
-	 * Añade nombres de clases a una lista de elementos 
-	 * @param {HTMLCollection} elementList => Lista de nodos
-	 * @param {string} nameClass		   => Nombre de clase
-	 */
-	myAddClass: function(elementList, nameClass) {
-		for(var element of elementList)
-			element.classList.add(nameClass);
 	}
 }
 

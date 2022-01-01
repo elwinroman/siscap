@@ -1,14 +1,14 @@
-<div id="lista-oficina">
+<div id="lista-trabajador">
 	<div class="content-header">
-		<h1>Lista de oficinas</h1>
+		<h1>Lista de trabajadores</h1>
 		<ul>
 			<li>Siscap</li>
 			<li>Oficinas</li>
-			<li>Lista de oficinas</li>
+			<li>Lista de trabajadores</li>
 		</ul>
 	</div>
 	<div class="box">
-		<div class="box-title">Datatable oficina</div>
+		<div class="box-title">Datatable trabajador</div>
 		<div class="exportable-options btn-group btn-group-sm">
 			<button class="btn btn-danger pdf-button">
 				<i class="zmdi zmdi-file"></i>
@@ -23,7 +23,7 @@
 				<span>Print</span>
 			</button>
 		</div>
-		<table id="dt-oficina"><!-- Datatable --></table>
+		<table id="dt-trabajador"><!-- Datatable --></table>
 	</div>
 
 	<div class="box">
@@ -34,8 +34,4 @@
 	</div>
 </div>
 
-<?php if(isset($_SESSION['oficina']['eliminar'])): ?>
-	<div id="alerta-eliminar-oficina" class="alerta-msg">
-		<?=$_SESSION['oficina']['eliminar'];?>		
-	</div>
-<?php endif; ?>
+<!-- PHP cookie here -->

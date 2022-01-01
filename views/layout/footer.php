@@ -1,12 +1,12 @@
-
-			<!-- Termina la seccion del contenido  -->
-		</section>
-<!-- PIE DE PAGINA -->
-		<footer>
-			© 2020 Municipalidad Provincial Puno
+	</div>
+	</div>
+	<!-- Termina la seccion del contenido  -->
+	<footer class="footer">
+		<div class="info">
+			<span>© 2020 Municipalidad Provincial Puno</span>
 			<span>All rights reserved</span>
-		</footer>
-	</main>
-	<div id="modal-main"></div>
+		</div>
+	</footer>
+</main>
 </body>
 </html>

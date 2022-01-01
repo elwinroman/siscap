@@ -3,13 +3,13 @@ class ControladorBase {
 	public function __construct() {
 		require 'helpers.func.php';
 
-		// Incluir todos los modelos
+		// Incluye todos los modelos en cualquier controlador
 		foreach (glob("models/*.php") as $file)
 			require_once $file;
 	}
 	/**
 	 * Redirecciona a una URL soluciondo el error tipico de "cannot modify header information"
-	 * @param {String} $url
+	 * @param {String} url
 	 */
 	protected function redirect($url) {
 		if (!headers_sent()) {    
